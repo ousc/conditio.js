@@ -1,0 +1,22 @@
+{
+  "name": "casejs",
+  "version": "1.0.0",
+  "description": "A simple syntactic sugar library that completely replaces switch/case, and has many new features, inspired by when in Kotlin.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "when",
+    "case",
+    "swtich",
+    "kotlin",
+    "typescript"
+  ],
+  "author": "OUSC",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}
