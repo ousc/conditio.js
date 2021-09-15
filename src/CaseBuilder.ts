@@ -8,11 +8,11 @@ export class CaseBuilder {
     private activated: boolean = false;
 
     constructor(cb: any) {
-        const {type, value, operation, isDefault} = cb;
+        const {type, value, operation, isElse} = cb;
         this.type = type;
         this.value = value;
         this.operations = [...operation].filter(fn => !!fn)
-        this.default = isDefault;
+        this.default = isElse;
         return this;
     }
 
@@ -40,7 +40,16 @@ export class CaseBuilder {
      *
      */
     private _execute() {
-        this.operations.forEach(fn => fn());
+        let res: any[] = [];
+        this.operations.forEach((o, index) => {
+            if (typeof o == 'function') {
+                res = [...res, o(res[index - 1] || null)];
+            } else {
+                res = [...res, o];
+            }
+
+        });
+        return res;
     }
 
     /**
@@ -52,7 +61,11 @@ export class CaseBuilder {
      * @CreateDate : 2021-09-15 星期三 14:35:12
      *
      */
-    private _activate() {
+    _activate() {
+        if (this.type === 'IN' && this.operations.length === 0 && this.value?.length > 1) {
+            this.operations = [this.value[this.value.length - 1]];
+            this.value = this.value.slice(0, this.value.length - 1);
+        }
         this.activated = true;
         return this;
     }
@@ -62,16 +75,14 @@ export class CaseBuilder {
      * @Method : _validate
      * @Description : Judge whether the condition is true
      * @return : boolean
-     * @author : Ousc
+     * @author : OUSC
      * @CreateDate : 2021-09-15 星期三 14:15:21
      *
      */
     _validate(caseMode: boolean, value: any = null) {
-        return (
-            ((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT) || this.default) || // Case语句条件为True或为默认选项则返回真
-            (!caseMode && ((this.type === 'IS' && this.value === value) || !!this.default)) || // IS语句值与条件相等或为默认选项则返回真
-            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || !!this.default)) || // In语句值满足条件或为默认选项则返回真
-            (!caseMode && ((this.type === 'MATCH' && value.test(this.value)) || !!this.default)) // Match语句条件满足表达式或为默认选项则返回真
-        )
+        return (((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT) || this.default) ||
+            (!caseMode && ((this.type === 'IS' && this.value === value) || this.default)) ||
+            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || this.default)) ||
+            (!caseMode && ((this.type === 'MATCH' && this.value.test(value)) || this.default)))
     }
 }

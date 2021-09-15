@@ -8,71 +8,120 @@ when" in Kotlin.
 ```
 npm install case.js --save
 ```
+
 ### Basic Usage
+
 Both "when" and "when" can be used.
+
 ```javascript
-    let value = 4, another_value = 4;
-    When(value,
-        Is(1, () => {
-            console.log('case 1!');
+    const value = 2;
+    let result = when(
+        Case(value === 1, '=1'),
+        Case(value < 1, '<1'),
+        Case(value > 1, '>1'),
+        Case(value >= 2 && value < 3, '2 <= value < 3')
+    )
+    console.log(result);
+```
+
+console:
+
+```
+2 <= value < 3
+```
+
+
+
+```javascript
+    const value = 2;
+    when(
+        Case(value === 1, () => {
+            console.log(' = 1')
         }),
-        Is(2).then(() => {
-            console.log('case 2!');
+        Case(value < 1, () => {
+            console.log(' < 1')
         }),
-        Is(3, () => {
-            console.log('case 3!');
+        Case(value > 1, () => {
+            console.log(' > 1')
         }),
-        In(4, 5, 6, () => {
-            console.log('in [4, 5, 6]');
-        }),
-        In(...[7, 8, 9], () => {
-            console.log('in [7, 8, 9]');
-        }),
-        InRange(10, 100, () => {
-            console.log('in [7, 8, 9]');
-        }),
-        Case(value + another_value === 5, () => {
-            console.log('a + b = 5');
-        }),
-        Default(() => {
-            console.log('a is not in 1~100!');
-        })
     )
 ```
+
 console:
-> in [4, 5, 6]
+
+```
+> 1
+```
+
+
+
+------
+
+
 
 And you can just use like "if-else"
- ```javascript
-    when(
-        Case(value === 2 && another_value === 2, () => {
-            console.log('a = 2 and b = 2')
-        }).then(()=>{
-            console.log('so a = b')
-        }),
-        Case(value === 1, () => {
-            console.log('a = 1!')
-        }),
-        Case(value >= 2 && value <= 3, () => {
-            console.log('2 <= a <= 3!')
-        }),
-        Case(value > 3, () => {
-            console.log('a > 3!')
-        }),
-        Default(() => {
-            console.log('a should >= 1!')
-        })
-    )
-```
-console:
-> a > 3!
----------
-|  Name   | description  |
-|  ----  | ----  |
-| Case  | When the event in Case is true, the statement in Case will be executed, and the expression in then will be executed in turn |
-| Is  | If the value is equal to the condition, the statement after the condition is executed |
-| In  | If one of multiple conditions is met, the statement after the condition will be executed |
-| InRange  | If the condition is satisfied in the Range range, the statement after the condition will be executed |
-| Match  | If the condition satisfies the regular expression, the statement after the condition will be executed |
-| Default  | Statements that will be executed by default |
 
+ ```javascript
+    const number = 72;
+    when(number,
+        InRange(1, 20, 'number in 1..20'),
+        InRange(21, 40, 'number in 21..40'),
+        InRange(41, 60, 'number in 41..60'),
+        InRange(61, 80, 'number in 61..80')
+            .then((res) => {
+                console.log(res);
+                return when(number,
+                    InRange(61, 70, "number in 61..70"),
+                    InRange(71, 80, "number in 71..80"),
+                );
+            })
+            .then((res) => {
+                console.log(res)
+            }),
+        InRange(81, 100, 'number in 81..100'),
+        In(101, 102, 'number in 101..102')
+    )
+ ```
+
+console:
+
+```
+number in 61..80
+number in 71..80
+```
+
+
+
+----
+
+Is expression：
+
+```javascript
+    const letter = 'T';
+    console.log(
+    when(letter,
+        Is('A', 'letter is A'),
+        Is('F', 'letter is F'),
+        Is('M', 'letter is M'),
+        Is('T', 'letter is T'),
+        Is('Z', 'letter is Z'),
+    )
+)
+```
+
+console:
+
+```
+letter is T
+```
+
+---------
+
+| Name    | description                                                  |
+| ------- | ------------------------------------------------------------ |
+| Case    | When the event in Case is true, the statement in Case will be executed, and the expression in then will be executed in turn |
+| Is      | If the value is equal to the condition, the statement after the condition is executed |
+| In      | If one of multiple conditions is met, the statement after the condition will be executed |
+| InRange | If the condition is satisfied in the Range range, the statement after the condition will be executed |
+| Match   | If the condition satisfies the regular expression, the statement after the condition will be executed |
+| Else    | Statements that will be executed by default                  |

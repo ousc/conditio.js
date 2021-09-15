@@ -35,13 +35,13 @@ export declare class CaseBuilder {
      * @CreateDate : 2021-09-15 星期三 14:35:12
      *
      */
-    private _activate;
+    _activate(): this;
     /**
      *
      * @Method : _validate
      * @Description : Judge whether the condition is true
      * @return : boolean
-     * @author : Ousc
+     * @author : OUSC
      * @CreateDate : 2021-09-15 星期三 14:15:21
      *
      */

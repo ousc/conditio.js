@@ -18,11 +18,11 @@ var CaseBuilder = /** @class */ (function () {
         this.operations = [];
         this.default = false;
         this.activated = false;
-        var type = cb.type, value = cb.value, operation = cb.operation, isDefault = cb.isDefault;
+        var type = cb.type, value = cb.value, operation = cb.operation, isElse = cb.isElse;
         this.type = type;
         this.value = value;
         this.operations = __spreadArray([], operation, true).filter(function (fn) { return !!fn; });
-        this.default = isDefault;
+        this.default = isElse;
         return this;
     }
     /**
@@ -48,7 +48,16 @@ var CaseBuilder = /** @class */ (function () {
      *
      */
     CaseBuilder.prototype._execute = function () {
-        this.operations.forEach(function (fn) { return fn(); });
+        var res = [];
+        this.operations.forEach(function (o, index) {
+            if (typeof o == 'function') {
+                res = __spreadArray(__spreadArray([], res, true), [o(res[index - 1] || null)], false);
+            }
+            else {
+                res = __spreadArray(__spreadArray([], res, true), [o], false);
+            }
+        });
+        return res;
     };
     /**
      *
@@ -60,6 +69,11 @@ var CaseBuilder = /** @class */ (function () {
      *
      */
     CaseBuilder.prototype._activate = function () {
+        var _a;
+        if (this.type === 'IN' && this.operations.length === 0 && ((_a = this.value) === null || _a === void 0 ? void 0 : _a.length) > 1) {
+            this.operations = [this.value[this.value.length - 1]];
+            this.value = this.value.slice(0, this.value.length - 1);
+        }
         this.activated = true;
         return this;
     };
@@ -68,17 +82,16 @@ var CaseBuilder = /** @class */ (function () {
      * @Method : _validate
      * @Description : Judge whether the condition is true
      * @return : boolean
-     * @author : Ousc
+     * @author : OUSC
      * @CreateDate : 2021-09-15 星期三 14:15:21
      *
      */
     CaseBuilder.prototype._validate = function (caseMode, value) {
         if (value === void 0) { value = null; }
-        return (((this.type === 'CASE' && !!this.value && this.value !== exports.__NO_INPUT) || this.default) || // Case语句条件为True或为默认选项则返回真
-            (!caseMode && ((this.type === 'IS' && this.value === value) || !!this.default)) || // IS语句值与条件相等或为默认选项则返回真
-            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || !!this.default)) || // In语句值满足条件或为默认选项则返回真
-            (!caseMode && ((this.type === 'MATCH' && value.test(this.value)) || !!this.default)) // Match语句条件满足表达式或为默认选项则返回真
-        );
+        return (((this.type === 'CASE' && !!this.value && this.value !== exports.__NO_INPUT) || this.default) ||
+            (!caseMode && ((this.type === 'IS' && this.value === value) || this.default)) ||
+            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || this.default)) ||
+            (!caseMode && ((this.type === 'MATCH' && this.value.test(value)) || this.default)));
     };
     return CaseBuilder;
 }());

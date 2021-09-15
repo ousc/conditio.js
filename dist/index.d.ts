@@ -1,2 +1,2 @@
 export { CaseBuilder } from './src/CaseBuilder';
-export { Is, Case, In, InRange, Match, Default } from './src/Generator';
+export { When, when, Is, Case, In, InRange, Match, Else } from './src/Generator';
