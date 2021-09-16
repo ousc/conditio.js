@@ -16,7 +16,7 @@ Used in modern frameworks(Vue, React, NG(soon)) and typescript
 ```typescript
     import {When, when, Case, Match, Is, In, InRange, Else} from 'when-case';
     let value: string = 'someValue';
-    when(
+    when(value,
         Case(value.length > 10, () => {
             console.log('hello world');
         }),
@@ -29,7 +29,7 @@ Used in modern frameworks(Vue, React, NG(soon)) and typescript
     )
 ```
 
-Basic usage, both "when" and "when" can be used.
+Basic usage, both "when" and "When" can be used.
 
 ```javascript
     const value = 2;

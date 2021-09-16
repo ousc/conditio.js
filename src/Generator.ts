@@ -4,9 +4,9 @@ export const Is = function (value = __NO_INPUT, operation: any = null) {
     return new CaseBuilder({type: 'IS', value: value, operation: [operation]});
 }
 
-export const Case = function (someCase = false, operation: any = null) {
+export const Case = function (condition = false, operation: any = null) {
     return new CaseBuilder({
-        type: 'CASE', value: someCase, operation: [operation]
+        type: 'CASE', value: condition, operation: [operation]
     })
 };
 
@@ -38,7 +38,7 @@ export const Else = function (operation = null) {
 }
 
 export const when = function (...args: any) {
-    let res = [];
+    let res: any[];
     if (!!args[0] && args[0] instanceof CaseBuilder) { // 是否为Case模式
         res = args.find((_case: CaseBuilder) => _case._validate(true))
             ?._activate()

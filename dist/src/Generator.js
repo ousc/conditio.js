@@ -17,11 +17,11 @@ var Is = function (value, operation) {
     return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: value, operation: [operation] });
 };
 exports.Is = Is;
-var Case = function (someCase, operation) {
-    if (someCase === void 0) { someCase = false; }
+var Case = function (condition, operation) {
+    if (condition === void 0) { condition = false; }
     if (operation === void 0) { operation = null; }
     return new CaseBuilder_1.CaseBuilder({
-        type: 'CASE', value: someCase, operation: [operation]
+        type: 'CASE', value: condition, operation: [operation]
     });
 };
 exports.Case = Case;
@@ -66,7 +66,7 @@ var when = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    var res = [];
+    var res;
     if (!!args[0] && args[0] instanceof CaseBuilder_1.CaseBuilder) { // 是否为Case模式
         res = (_b = (_a = args.find(function (_case) { return _case._validate(true); })) === null || _a === void 0 ? void 0 : _a._activate()) === null || _b === void 0 ? void 0 : _b._execute();
     }

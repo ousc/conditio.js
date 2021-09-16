@@ -11,6 +11,7 @@ describe('测试基本的Case用法', () => {
 
     it('Case若满足多条件，第一个可被执行', () => {
         const value = 2;
+
         expect(
             when(
                 Case(value === 1, '=1'),

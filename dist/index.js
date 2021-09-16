@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Else = exports.Match = exports.InRange = exports.In = exports.Case = exports.Is = exports.when = exports.When = exports.CaseBuilder = void 0;
-var CaseBuilder_1 = require("./src/CaseBuilder");
-Object.defineProperty(exports, "CaseBuilder", { enumerable: true, get: function () { return CaseBuilder_1.CaseBuilder; } });
+exports.Else = exports.Match = exports.InRange = exports.In = exports.Case = exports.Is = exports.when = exports.When = void 0;
 var Generator_1 = require("./src/Generator");
 Object.defineProperty(exports, "When", { enumerable: true, get: function () { return Generator_1.When; } });
 Object.defineProperty(exports, "when", { enumerable: true, get: function () { return Generator_1.when; } });
