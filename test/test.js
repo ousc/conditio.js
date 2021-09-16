@@ -143,5 +143,16 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal(undefined);
     })
 
+    it('Else返回Object类型值', () => {
+        let data = {
+            "data": 'someValue'
+        }
+        expect(
+            When(
+                Else(data)
+            )
+        ).to.be.equal(data);
+    })
+
 
 });
