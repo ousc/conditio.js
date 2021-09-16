@@ -143,6 +143,13 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal(undefined);
     })
 
+    it('When have returns，return the last value', () => {
+        const value = 2;
+        expect(
+            When(value, Case(value === 2, 2).then(_ => 3).then(_ => 4))
+        ).to.be.equal(4);
+    })
+
     it('Else返回Object类型值', () => {
         let data = {
             "data": 'someValue'

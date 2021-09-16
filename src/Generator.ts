@@ -50,7 +50,7 @@ export const when = function (...args: any) {
             ?._activate()
             ?._execute();
     }
-    return res?.filter((k: any) => k != undefined)?.length == 1 ? res[0] : res;
+    return res ? res[res.length - 1] : res;
 }
 
 export const When = when;

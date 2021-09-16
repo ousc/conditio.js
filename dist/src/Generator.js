@@ -61,7 +61,7 @@ var Else = function (operation) {
 };
 exports.Else = Else;
 var when = function () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
@@ -75,7 +75,7 @@ var when = function () {
             .slice(1, args.length)
             .find(function (_case) { return _case._validate(false, args[0]); })) === null || _c === void 0 ? void 0 : _c._activate()) === null || _d === void 0 ? void 0 : _d._execute();
     }
-    return ((_e = res === null || res === void 0 ? void 0 : res.filter(function (k) { return k != undefined; })) === null || _e === void 0 ? void 0 : _e.length) == 1 ? res[0] : res;
+    return res ? res[res.length - 1] : res;
 };
 exports.when = when;
 exports.When = exports.when;
