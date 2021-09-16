@@ -11,26 +11,33 @@ npm install when-case --save
 
 ### Basic Usage
 
-Use in Vue
+Used in modern frameworks(Vue, React, NG(soon)) and typescript
 
 ```typescript
     import {When, when, Case, Match, Is, In, InRange, Else} from 'when-case';
+    let value: string = 'someValue';
     when(
-        Case(1 == 1, ()=>{
+        Case(value.length > 10, () => {
             console.log('hello world');
+        }),
+        Is('anotherValue', () => {
+            console.log('this is another value')
+        }),
+        Else(()=>{
+            // Do something
         })
     )
 ```
 
-Both "when" and "when" can be used.
+Basic usage, both "when" and "when" can be used.
 
 ```javascript
     const value = 2;
     let result = when(
-        Case(value === 1, '=1'),
-        Case(value < 1, '<1'),
-        Case(value > 1, '>1'),
-        Case(value >= 2 && value < 3, '2 <= value < 3')
+        Case(value === 1, 1),
+        Case(value < 1, ' < 1'),
+        // 可以传入箭头函数，以返回值作为结果
+        Case(value > 1, _=> 1 + value)
     )
     console.log(result);
 ```
@@ -38,7 +45,7 @@ Both "when" and "when" can be used.
 console:
 
 ```
-2 <= value < 3
+3
 ```
 
 -----
@@ -50,8 +57,13 @@ Return nothing, you can just use like "if-else"
         Case(value === 1, () => {
             console.log(' = 1')
         }),
-        Case(value < 1, () => {
-            console.log(' < 1')
+        //You can also use the wording of then
+        //when you use then continuously
+        //you can get the return value of the pre 'then'
+        Case(value < 1).then(() => {
+            return ' < 1';
+        }).then((value)=>{
+            console.log(value)
         }),
         Case(value > 1, () => {
             console.log(' > 1')
@@ -75,6 +87,7 @@ Usage for "In" and "InRange"
     const number = 72;
     const arr = [159, 160, 161];
     when(number,
+        // Input start and end range
         InRange(1, 20, 'number in 1..20'),
         InRange(21, 40, 'number in 21..40'),
         InRange(41, 60, 'number in 41..60'),
@@ -90,6 +103,7 @@ Usage for "In" and "InRange"
                 console.log(res)
             }),
         InRange(81, 100, 'number in 81..100'),
+        // multiple values
         In(101, 102, 105, 'number in 101..102 or 105'),
         In(...arr, 'number in arr'),
     )
@@ -104,7 +118,7 @@ number in 71..80
 
 ----
 
-"Is" expression：
+"Is" usage, equivalent to Switch-Case syntax without penetration
 
 ```javascript
     const letter = 'T';
@@ -127,7 +141,7 @@ letter is T
 ```
 
 ---------
-'Match' expression
+"Match" regular matching
 ```javascript
     when(email,
         Match(/^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/).then(()=>{
@@ -150,9 +164,9 @@ match email regexp
 
 | Name    | description                                                  |
 | ------- | ------------------------------------------------------------ |
-| Case    | When the event in Case is true, the statement in Case will be executed, and the expression in then will be executed in turn |
-| Is      | If the value is equal to the condition, the statement after the condition is executed |
-| In      | If one of multiple conditions is met, the statement after the condition will be executed |
-| InRange | If the condition is satisfied in the Range range, the statement after the condition will be executed |
-| Match   | If the condition satisfies the regular expression, the statement after the condition will be executed |
-| Else    | Statements that will be executed by default                  |
+| Case    | Perform the operation if the condition is true |
+| Is      | Perform the operation if it is equal to the incoming value |
+| In      | Contains the incoming value to perform the operation |
+| InRange | Perform operations within the upper and lower limits |
+| Match   | The incoming value conforms to the regular operation |
+| Else    | Actions that will be performed by default<br>When there are multiple Else, only the first one will be executed                  |

@@ -92,6 +92,7 @@ describe('测试基本的Case用法', () => {
                 InRange(61, 80, 'number in 61..80'),
                 InRange(81, 100, 'number in 81..100').then(res => {
                     console.log(res);
+                    return res;
                 }),
             )
         ).to.be.equal('number in 81..100');
