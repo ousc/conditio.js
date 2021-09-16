@@ -36,7 +36,7 @@ Basic usage, both "when" and "when" can be used.
     let result = when(
         Case(value === 1, 1),
         Case(value < 1, ' < 1'),
-        // 可以传入箭头函数，以返回值作为结果
+        // You can pass in an arrow function, and take the return value as the result
         Case(value > 1, _=> 1 + value)
     )
     console.log(result);
