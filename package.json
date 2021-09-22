@@ -1,6 +1,6 @@
 {
   "name": "when-case",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple syntactic sugar library that completely replaces switch/case, and has many new features, inspired by when in Kotlin.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
