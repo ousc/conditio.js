@@ -16,13 +16,11 @@ var CaseBuilder = /** @class */ (function () {
         this.type = 'CASE';
         this.value = null;
         this.operations = [];
-        this.default = false;
         this.activated = false;
-        var type = cb.type, value = cb.value, operation = cb.operation, isElse = cb.isElse;
+        var type = cb.type, value = cb.value, operation = cb.operation;
         this.type = type;
         this.value = value;
         this.operations = __spreadArray([], operation, true).filter(function (fn) { return !!fn; });
-        this.default = isElse;
         return this;
     }
     /**
@@ -36,7 +34,7 @@ var CaseBuilder = /** @class */ (function () {
      */
     CaseBuilder.prototype.then = function (operation) {
         this.operations = __spreadArray(__spreadArray([], this.operations, true), [operation], false);
-        return this;
+        return this._activate();
     };
     /**
      *
@@ -88,10 +86,11 @@ var CaseBuilder = /** @class */ (function () {
      */
     CaseBuilder.prototype._validate = function (caseMode, value) {
         if (value === void 0) { value = null; }
-        return (((this.type === 'CASE' && !!this.value && this.value !== exports.__NO_INPUT) || this.default) ||
-            (!caseMode && ((this.type === 'IS' && this.value === value) || this.default)) ||
-            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || this.default)) ||
-            (!caseMode && ((this.type === 'MATCH' && this.value.test(value)) || this.default)));
+        return (this.type === 'ELSE') ||
+            (((this.type === 'CASE' && !!this.value && this.value !== exports.__NO_INPUT)) ||
+                (!caseMode && ((this.type === 'IS' && this.value === value))) ||
+                (!caseMode && ((this.type === 'IN' && this.activated && this.value.includes(value)))) ||
+                (!caseMode && ((this.type === 'MATCH' && this.value.test(value)))));
     };
     return CaseBuilder;
 }());

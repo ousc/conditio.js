@@ -57,7 +57,7 @@ var Match = function (regexp, operation) {
 exports.Match = Match;
 var Else = function (operation) {
     if (operation === void 0) { operation = null; }
-    return new CaseBuilder_1.CaseBuilder({ isElse: true, operation: [operation] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'ELSE', operation: [operation] });
 };
 exports.Else = Else;
 var when = function () {

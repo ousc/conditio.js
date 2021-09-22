@@ -34,7 +34,7 @@ export const Match = function (regexp = false, operation = null) {
 }
 
 export const Else = function (operation = null) {
-    return new CaseBuilder({isElse: true, operation: [operation]});
+    return new CaseBuilder({type: 'ELSE', operation: [operation]});
 }
 
 export const when = function (...args: any) {

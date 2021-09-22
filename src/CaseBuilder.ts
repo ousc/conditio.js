@@ -4,15 +4,13 @@ export class CaseBuilder {
     private type: string = 'CASE'
     private value: any = null;
     private operations: any[] = [];
-    private default: boolean = false;
     private activated: boolean = false;
 
     constructor(cb: any) {
-        const {type, value, operation, isElse} = cb;
+        const { type, value, operation } = cb;
         this.type = type;
         this.value = value;
         this.operations = [...operation].filter(fn => !!fn)
-        this.default = isElse;
         return this;
     }
 
@@ -27,7 +25,7 @@ export class CaseBuilder {
      */
     public then(operation: any) {
         this.operations = [...this.operations, operation];
-        return this;
+        return this._activate();
     }
 
     /**
@@ -80,9 +78,10 @@ export class CaseBuilder {
      *
      */
     _validate(caseMode: boolean, value: any = null) {
-        return (((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT) || this.default) ||
-            (!caseMode && ((this.type === 'IS' && this.value === value) || this.default)) ||
-            (!caseMode && ((this.type === 'IN' && this.value.includes(value)) || this.default)) ||
-            (!caseMode && ((this.type === 'MATCH' && this.value.test(value)) || this.default)))
+        return (this.type === 'ELSE') ||
+            (((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT)) ||
+                (!caseMode && ((this.type === 'IS' && this.value === value))) ||
+                (!caseMode && ((this.type === 'IN' && this.activated && this.value.includes(value)))) ||
+                (!caseMode && ((this.type === 'MATCH' && this.value.test(value)))))
     }
 }

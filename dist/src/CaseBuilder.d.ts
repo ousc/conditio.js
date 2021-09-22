@@ -3,7 +3,6 @@ export declare class CaseBuilder {
     private type;
     private value;
     private operations;
-    private default;
     private activated;
     constructor(cb: any);
     /**
