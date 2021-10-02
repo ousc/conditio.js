@@ -14,7 +14,7 @@ npm install when-case --save
 Used in modern frameworks(Vue, React, NG(soon)) and typescript
 
 ```typescript
-    import {When, when, Case, Match, Is, In, InRange, Else} from 'when-case';
+    import {When, when, Case, Match, NotMatch, Is, In, NotIn, InRange, NotInRange, Else} from 'when-case';
     let value: string = 'someValue';
     when(value,
         Case(value.length > 10, () => {

@@ -1,5 +1,5 @@
 const {expect} = require('chai');
-const {when, When, Case, Else, Is, In, InRange, Match} = require("../dist");
+const {when, When, Case, Else, Is, In, NotIn, InRange, NotInRange, Match, NotMatch} = require("../dist");
 
 describe('测试基本的Case用法', () => {
     it('Case满足条件即可被执行', () => {
@@ -83,6 +83,17 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('letter in group4');
     })
 
+    it('NOTIN能够正确表现', () => {
+        const letter = 'T';
+        expect(
+            when(letter,
+                NotIn('A', 'B', 'C', 'D', 'E', 'letter not in ABCDE'),
+                Else('letter in ABCDE'),
+            )
+        ).to.be.equal('letter not in ABCDE');
+    })
+
+
     it('InRange能够正确表现', () => {
         const number = 87;
         expect(
@@ -99,6 +110,16 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('number in 81..100');
     })
 
+    it('NotInRange能够正确表现', () => {
+        const number = 13;
+        expect(
+            when(number,
+                NotInRange(12, 15, 'number not in 12~15'),
+                Else('number in 12~15'),
+            )
+        ).to.be.equal('number in 12~15');
+    })
+
     it('Match能够正确表现', () => {
         const email = 'test@email.com';
         expect(
@@ -108,6 +129,16 @@ describe('测试基本的Case用法', () => {
                 Match(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{8,}$/, "password regexp"),
             )
         ).to.be.equal('email regexp');
+    })
+
+    it('NotMatch能够正确表现', () => {
+        const email = 'test@email.com';
+        expect(
+            when(email,
+                NotMatch(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, 'bad email!'),
+                Else('ok'),
+            )
+        ).to.be.equal('ok');
     })
 
     it('测试then以及then的传值是否可以正常使用', () => {

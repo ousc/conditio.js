@@ -9,7 +9,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.When = exports.when = exports.Else = exports.Match = exports.InRange = exports.In = exports.Case = exports.Is = void 0;
+exports.When = exports.when = exports.Else = exports.NotMatch = exports.Match = exports.NotInRange = exports.InRange = exports.NotIn = exports.In = exports.Case = exports.Is = void 0;
 var CaseBuilder_1 = require("./CaseBuilder");
 var Is = function (value, operation) {
     if (value === void 0) { value = CaseBuilder_1.__NO_INPUT; }
@@ -38,6 +38,19 @@ var In = function () {
     return new CaseBuilder_1.CaseBuilder({ type: 'IN', value: value, operation: [operation] })._activate();
 };
 exports.In = In;
+var NotIn = function () {
+    var value = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        value[_i] = arguments[_i];
+    }
+    var operation = null;
+    if (typeof value[value.length - 1] === 'function') {
+        operation = value[value.length - 1];
+        value = value.slice(0, value.length - 1);
+    }
+    return new CaseBuilder_1.CaseBuilder({ type: 'NOTIN', value: value, operation: [operation] })._activate();
+};
+exports.NotIn = NotIn;
 var InRange = function (start, end, operation) {
     if (operation === void 0) { operation = null; }
     var length = end - start + 1;
@@ -49,12 +62,29 @@ var InRange = function (start, end, operation) {
     return exports.In.apply(void 0, __spreadArray(__spreadArray([], range, true), [operation], false).filter(function (o) { return o !== null; }))._activate();
 };
 exports.InRange = InRange;
+var NotInRange = function (start, end, operation) {
+    if (operation === void 0) { operation = null; }
+    var length = end - start + 1;
+    var step = start - 1;
+    var range = Array.apply(null, new Array(length)).map(function (v, i) {
+        step++;
+        return step;
+    });
+    return exports.NotIn.apply(void 0, __spreadArray(__spreadArray([], range, true), [operation], false).filter(function (o) { return o !== null; }))._activate();
+};
+exports.NotInRange = NotInRange;
 var Match = function (regexp, operation) {
     if (regexp === void 0) { regexp = false; }
     if (operation === void 0) { operation = null; }
     return new CaseBuilder_1.CaseBuilder({ type: 'MATCH', value: regexp, operation: [operation] });
 };
 exports.Match = Match;
+var NotMatch = function (regexp, operation) {
+    if (regexp === void 0) { regexp = false; }
+    if (operation === void 0) { operation = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'NOTMATCH', value: regexp, operation: [operation] });
+};
+exports.NotMatch = NotMatch;
 var Else = function (operation) {
     if (operation === void 0) { operation = null; }
     return new CaseBuilder_1.CaseBuilder({ type: 'ELSE', operation: [operation] });

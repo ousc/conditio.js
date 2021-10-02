@@ -7,7 +7,7 @@ export class CaseBuilder {
     private activated: boolean = false;
 
     constructor(cb: any) {
-        const { type, value, operation } = cb;
+        const {type, value, operation} = cb;
         this.type = type;
         this.value = value;
         this.operations = [...operation].filter(fn => !!fn)
@@ -60,7 +60,7 @@ export class CaseBuilder {
      *
      */
     _activate() {
-        if (this.type === 'IN' && this.operations.length === 0 && this.value?.length > 1) {
+        if (this.type === 'IN' || this.type === 'NOTIN' && this.operations.length === 0 && this.value?.length > 1) {
             this.operations = [this.value[this.value.length - 1]];
             this.value = this.value.slice(0, this.value.length - 1);
         }
@@ -82,6 +82,9 @@ export class CaseBuilder {
             (((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT)) ||
                 (!caseMode && ((this.type === 'IS' && this.value === value))) ||
                 (!caseMode && ((this.type === 'IN' && this.activated && this.value.includes(value)))) ||
-                (!caseMode && ((this.type === 'MATCH' && this.value.test(value)))))
+                (!caseMode && ((this.type === 'NOTIN' && this.activated && !this.value.includes(value)))) ||
+                (!caseMode && ((this.type === 'MATCH' && this.value.test(value)))) ||
+                (!caseMode && ((this.type === 'NOTMATCH' && !this.value.test(value))))
+            )
     }
 }

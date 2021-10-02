@@ -19,6 +19,15 @@ export const In = function (...value: any[]) {
     return new CaseBuilder({type: 'IN', value: value, operation: [operation]})._activate();
 }
 
+export const NotIn = function (...value: any[]) {
+    let operation = null;
+    if (typeof value[value.length - 1] === 'function') {
+        operation = value[value.length - 1];
+        value = value.slice(0, value.length - 1);
+    }
+    return new CaseBuilder({type: 'NOTIN', value: value, operation: [operation]})._activate();
+}
+
 export const InRange = (start: number, end: number, operation: any = null) => {
     var length = end - start + 1;
     var step = start - 1;
@@ -29,8 +38,22 @@ export const InRange = (start: number, end: number, operation: any = null) => {
     return In(...[...range, operation].filter(o => o !== null))._activate();
 }
 
+export const NotInRange = (start: number, end: number, operation: any = null) => {
+    var length = end - start + 1;
+    var step = start - 1;
+    let range = Array.apply(null, new Array(length)).map(function (v, i) {
+        step++;
+        return step;
+    });
+    return NotIn(...[...range, operation].filter(o => o !== null))._activate();
+}
+
 export const Match = function (regexp = false, operation = null) {
     return new CaseBuilder({type: 'MATCH', value: regexp, operation: [operation]})
+}
+
+export const NotMatch = function (regexp = false, operation = null) {
+    return new CaseBuilder({type: 'NOTMATCH', value: regexp, operation: [operation]})
 }
 
 export const Else = function (operation = null) {
