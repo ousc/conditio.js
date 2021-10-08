@@ -1,12 +1,32 @@
 import {__NO_INPUT, CaseBuilder} from './CaseBuilder'
 
-export const Is = function (value = __NO_INPUT, operation: any = null) {
-    return new CaseBuilder({type: 'IS', value: value, operation: [operation]});
+export const Is = function (value = __NO_INPUT, then: any = null) {
+    return new CaseBuilder({type: 'IS', value: value, operation: [then]});
 }
 
-export const Case = function (condition = false, operation: any = null) {
+export const Not = function (value = __NO_INPUT, then: any = null) {
+    return new CaseBuilder({type: 'NOT', value: value, operation: [then]});
+}
+
+export const IsNull = function (then: any = null) {
+    return new CaseBuilder({type: 'IS', value: null, operation: [then]});
+}
+
+export const IsUndefined = function (then: any = null) {
+    return new CaseBuilder({type: 'IS', value: undefined, operation: [then]});
+}
+
+export const IsNaN = function (then: any = null) {
+    return new CaseBuilder({type: 'ISNAN', operation: [then]});
+}
+
+export const BelongTo = function (type: "object" | "undefined" | "boolean" | "number" | "string" | "array" | "function" | "symbol", then: any = null) {
+    return new CaseBuilder({type: 'ISTYPE', value: type, operation: [then]});
+}
+
+export const Case = function (condition = false, then: any = null) {
     return new CaseBuilder({
-        type: 'CASE', value: condition, operation: [operation]
+        type: 'CASE', value: condition, operation: [then]
     })
 };
 
@@ -28,42 +48,42 @@ export const NotIn = function (...value: any[]) {
     return new CaseBuilder({type: 'NOTIN', value: value, operation: [operation]})._activate();
 }
 
-export const InRange = (start: number, end: number, operation: any = null) => {
+export const InRange = (start: number, end: number, then: any = null) => {
     var length = end - start + 1;
     var step = start - 1;
     let range = Array.apply(null, new Array(length)).map(function (v, i) {
         step++;
         return step;
     });
-    return In(...[...range, operation].filter(o => o !== null))._activate();
+    return In(...[...range, then].filter(o => o !== null))._activate();
 }
 
-export const NotInRange = (start: number, end: number, operation: any = null) => {
+export const NotInRange = (start: number, end: number, then: any = null) => {
     var length = end - start + 1;
     var step = start - 1;
     let range = Array.apply(null, new Array(length)).map(function (v, i) {
         step++;
         return step;
     });
-    return NotIn(...[...range, operation].filter(o => o !== null))._activate();
+    return NotIn(...[...range, then].filter(o => o !== null))._activate();
 }
 
-export const Match = function (regexp = false, operation = null) {
-    return new CaseBuilder({type: 'MATCH', value: regexp, operation: [operation]})
+export const Match = function (regexp = false, then = null) {
+    return new CaseBuilder({type: 'MATCH', value: regexp, operation: [then]})
 }
 
-export const NotMatch = function (regexp = false, operation = null) {
-    return new CaseBuilder({type: 'NOTMATCH', value: regexp, operation: [operation]})
+export const NotMatch = function (regexp = false, then = null) {
+    return new CaseBuilder({type: 'NOTMATCH', value: regexp, operation: [then]})
 }
 
-export const Else = function (operation = null) {
-    return new CaseBuilder({type: 'ELSE', operation: [operation]});
+export const Else = function (then = null) {
+    return new CaseBuilder({type: 'ELSE', operation: [then]});
 }
 
 export const when = function (...args: any) {
     let res: any[];
-    if (!!args[0] && args[0] instanceof CaseBuilder) { // 是否为Case模式
-        res = args.find((_case: CaseBuilder) => _case._validate(true))
+    if (args.length > 0 && args[0] instanceof CaseBuilder) { // 是否为Case模式
+        res = args.find((_case: CaseBuilder) => _case._validate(true, undefined))
             ?._activate()
             ?._execute();
     } else {

@@ -9,19 +9,45 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.When = exports.when = exports.Else = exports.NotMatch = exports.Match = exports.NotInRange = exports.InRange = exports.NotIn = exports.In = exports.Case = exports.Is = void 0;
+exports.When = exports.when = exports.Else = exports.NotMatch = exports.Match = exports.NotInRange = exports.InRange = exports.NotIn = exports.In = exports.Case = exports.BelongTo = exports.IsNaN = exports.IsUndefined = exports.IsNull = exports.Not = exports.Is = void 0;
 var CaseBuilder_1 = require("./CaseBuilder");
-var Is = function (value, operation) {
+var Is = function (value, then) {
     if (value === void 0) { value = CaseBuilder_1.__NO_INPUT; }
-    if (operation === void 0) { operation = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: value, operation: [operation] });
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: value, operation: [then] });
 };
 exports.Is = Is;
-var Case = function (condition, operation) {
+var Not = function (value, then) {
+    if (value === void 0) { value = CaseBuilder_1.__NO_INPUT; }
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'NOT', value: value, operation: [then] });
+};
+exports.Not = Not;
+var IsNull = function (then) {
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: null, operation: [then] });
+};
+exports.IsNull = IsNull;
+var IsUndefined = function (then) {
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: undefined, operation: [then] });
+};
+exports.IsUndefined = IsUndefined;
+var IsNaN = function (then) {
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'ISNAN', operation: [then] });
+};
+exports.IsNaN = IsNaN;
+var BelongTo = function (type, then) {
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'ISTYPE', value: type, operation: [then] });
+};
+exports.BelongTo = BelongTo;
+var Case = function (condition, then) {
     if (condition === void 0) { condition = false; }
-    if (operation === void 0) { operation = null; }
+    if (then === void 0) { then = null; }
     return new CaseBuilder_1.CaseBuilder({
-        type: 'CASE', value: condition, operation: [operation]
+        type: 'CASE', value: condition, operation: [then]
     });
 };
 exports.Case = Case;
@@ -51,43 +77,43 @@ var NotIn = function () {
     return new CaseBuilder_1.CaseBuilder({ type: 'NOTIN', value: value, operation: [operation] })._activate();
 };
 exports.NotIn = NotIn;
-var InRange = function (start, end, operation) {
-    if (operation === void 0) { operation = null; }
+var InRange = function (start, end, then) {
+    if (then === void 0) { then = null; }
     var length = end - start + 1;
     var step = start - 1;
     var range = Array.apply(null, new Array(length)).map(function (v, i) {
         step++;
         return step;
     });
-    return exports.In.apply(void 0, __spreadArray(__spreadArray([], range, true), [operation], false).filter(function (o) { return o !== null; }))._activate();
+    return exports.In.apply(void 0, __spreadArray(__spreadArray([], range, true), [then], false).filter(function (o) { return o !== null; }))._activate();
 };
 exports.InRange = InRange;
-var NotInRange = function (start, end, operation) {
-    if (operation === void 0) { operation = null; }
+var NotInRange = function (start, end, then) {
+    if (then === void 0) { then = null; }
     var length = end - start + 1;
     var step = start - 1;
     var range = Array.apply(null, new Array(length)).map(function (v, i) {
         step++;
         return step;
     });
-    return exports.NotIn.apply(void 0, __spreadArray(__spreadArray([], range, true), [operation], false).filter(function (o) { return o !== null; }))._activate();
+    return exports.NotIn.apply(void 0, __spreadArray(__spreadArray([], range, true), [then], false).filter(function (o) { return o !== null; }))._activate();
 };
 exports.NotInRange = NotInRange;
-var Match = function (regexp, operation) {
+var Match = function (regexp, then) {
     if (regexp === void 0) { regexp = false; }
-    if (operation === void 0) { operation = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'MATCH', value: regexp, operation: [operation] });
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'MATCH', value: regexp, operation: [then] });
 };
 exports.Match = Match;
-var NotMatch = function (regexp, operation) {
+var NotMatch = function (regexp, then) {
     if (regexp === void 0) { regexp = false; }
-    if (operation === void 0) { operation = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'NOTMATCH', value: regexp, operation: [operation] });
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'NOTMATCH', value: regexp, operation: [then] });
 };
 exports.NotMatch = NotMatch;
-var Else = function (operation) {
-    if (operation === void 0) { operation = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'ELSE', operation: [operation] });
+var Else = function (then) {
+    if (then === void 0) { then = null; }
+    return new CaseBuilder_1.CaseBuilder({ type: 'ELSE', operation: [then] });
 };
 exports.Else = Else;
 var when = function () {
@@ -97,8 +123,8 @@ var when = function () {
         args[_i] = arguments[_i];
     }
     var res;
-    if (!!args[0] && args[0] instanceof CaseBuilder_1.CaseBuilder) { // 是否为Case模式
-        res = (_b = (_a = args.find(function (_case) { return _case._validate(true); })) === null || _a === void 0 ? void 0 : _a._activate()) === null || _b === void 0 ? void 0 : _b._execute();
+    if (args.length > 0 && args[0] instanceof CaseBuilder_1.CaseBuilder) { // 是否为Case模式
+        res = (_b = (_a = args.find(function (_case) { return _case._validate(true, undefined); })) === null || _a === void 0 ? void 0 : _a._activate()) === null || _b === void 0 ? void 0 : _b._execute();
     }
     else {
         res = (_d = (_c = args

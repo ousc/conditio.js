@@ -1,5 +1,22 @@
 const {expect} = require('chai');
-const {when, When, Case, Else, Is, In, NotIn, InRange, NotInRange, Match, NotMatch} = require("../dist");
+const {
+    when,
+    When,
+    Case,
+    Else,
+    Is,
+    In,
+    NotIn,
+    InRange,
+    NotInRange,
+    Match,
+    NotMatch,
+    Not,
+    IsNull,
+    IsUndefined,
+    IsNaN,
+    BelongTo
+} = require("../dist");
 
 describe('测试基本的Case用法', () => {
     it('Case满足条件即可被执行', () => {
@@ -78,7 +95,7 @@ describe('测试基本的Case用法', () => {
                 In(...['F', 'G', 'H', 'I', 'J', 'K', 'L'], 'letter in group2'),
                 In('M', 'N', 'O', 'P', 'Q', 'R', 'S', 'letter in group3'),
                 In('T', 'U', 'V', 'W', 'X', 'Y', 'letter in group4'),
-                Is('Z', 'letter in group4'),
+                Is('Z', 'letter in group5'),
             )
         ).to.be.equal('letter in group4');
     })
@@ -192,6 +209,55 @@ describe('测试基本的Case用法', () => {
                 Else(data)
             )
         ).to.be.equal(data);
+    })
+
+
+    it('BelongTo可以正常使用，判断类别', () => {
+        expect(
+            When(1,
+                BelongTo("number", '123'),
+                BelongTo("else", '456'),
+            )
+        ).to.be.equal('123');
+    })
+
+
+    it('测试IsNull是否可以使用', () => {
+        expect(
+            When(null,
+                IsNull('123'),
+                Else('456')
+            )
+        ).to.be.equal('123');
+    })
+
+
+    it('测试IsUndefined是否可以使用', () => {
+        expect(
+            when(undefined,
+                IsUndefined('123')
+            )
+        ).to.be.equal('123');
+    })
+
+
+    it('测试Not是否可以使用', () => {
+        expect(
+            when(1,
+                Not(2, '456'),
+                Else('123')
+            )
+        ).to.be.equal('456');
+    })
+
+
+    it('测试IsNaN是否可以使用', () => {
+        expect(
+            when(NaN,
+                IsNaN('456'),
+                Else('123')
+            )
+        ).to.be.equal('456');
     })
 
 

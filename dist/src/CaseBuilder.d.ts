@@ -44,5 +44,5 @@ export declare class CaseBuilder {
      * @CreateDate : 2021-09-15 星期三 14:15:21
      *
      */
-    _validate(caseMode: boolean, value?: any): any;
+    _validate(caseMode: boolean, value: any): any;
 }

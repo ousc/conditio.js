@@ -164,9 +164,22 @@ match email regexp
 
 | Name    | description                                                  |
 | ------- | ------------------------------------------------------------ |
-| Case    | Perform the operation if the condition is true |
-| Is      | Perform the operation if it is equal to the incoming value |
+| Case    | Perform the operations if the condition is true |
+| Is      | Perform the operations if it is equal to the incoming value |
 | In      | Contains the incoming value to perform the operation |
 | InRange | Perform operations within the upper and lower limits |
 | Match   | The incoming value conforms to the regular operation |
 | Else    | Actions that will be performed by default<br>When there are multiple Else, only the first one will be executed                  |
+
+advance
+
+| Name    | description                                                  |
+| ------- | ------------------------------------------------------------ |
+| Not     | Perform the operations if it is not equal to the incoming value |
+| NotIn      | Not contains the incoming value to perform the operation |
+| NotInRange | Perform operations without the upper and lower limits |
+| NotMatch   | The incoming value don't conforms to the regular operation |
+| IsNull     | Perform the operations if the value is 'null' |
+| IsNaN     | Perform the operations if the type of the value is 'number' and value is 'NaN' |
+| IsUndefined     | Perform the operations if the value is 'undefined' |
+| BelongTo     | Perform the operations if the type of value is : "object" / "undefined" / "boolean" / "number" / "string" / "array" / "function" / "symbol" |
