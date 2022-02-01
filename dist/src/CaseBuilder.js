@@ -20,7 +20,7 @@ var CaseBuilder = /** @class */ (function () {
         var type = cb.type, value = cb.value, operation = cb.operation;
         this.type = type;
         this.value = value;
-        this.operations = __spreadArray([], operation, true).filter(function (fn) { return !!fn; });
+        this.operations = __spreadArray([], operation, true).filter(function (fn) { return fn !== null && fn !== undefined; });
         return this;
     }
     /**

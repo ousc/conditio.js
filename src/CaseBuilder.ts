@@ -10,7 +10,7 @@ export class CaseBuilder {
         const {type, value, operation} = cb;
         this.type = type;
         this.value = value;
-        this.operations = [...operation].filter(fn => !!fn)
+        this.operations = [...operation].filter(fn => fn !== null && fn !== undefined)
         return this;
     }
 
