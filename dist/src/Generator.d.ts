@@ -1,6 +1,6 @@
 import { CaseBuilder } from './CaseBuilder';
-export declare const Is: (value?: string, then?: any) => CaseBuilder;
-export declare const Not: (value?: string, then?: any) => CaseBuilder;
+export declare const Is: (value?: any, then?: any) => CaseBuilder;
+export declare const Not: (value?: any, then?: any) => CaseBuilder;
 export declare const IsNull: (then?: any) => CaseBuilder;
 export declare const IsUndefined: (then?: any) => CaseBuilder;
 export declare const IsNaN: (then?: any) => CaseBuilder;
@@ -12,6 +12,6 @@ export declare const InRange: (start: number, end: number, then?: any) => CaseBu
 export declare const NotInRange: (start: number, end: number, then?: any) => CaseBuilder;
 export declare const Match: (regexp?: boolean, then?: null) => CaseBuilder;
 export declare const NotMatch: (regexp?: boolean, then?: null) => CaseBuilder;
-export declare const Else: (then?: null) => CaseBuilder;
+export declare const Else: (then?: any) => CaseBuilder;
 export declare const when: (...args: any) => any;
 export declare const When: (...args: any) => any;

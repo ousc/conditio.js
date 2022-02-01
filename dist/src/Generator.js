@@ -14,40 +14,40 @@ var CaseBuilder_1 = require("./CaseBuilder");
 var Is = function (value, then) {
     if (value === void 0) { value = CaseBuilder_1.__NO_INPUT; }
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: value, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Is', value: value, operation: [then] });
 };
 exports.Is = Is;
 var Not = function (value, then) {
     if (value === void 0) { value = CaseBuilder_1.__NO_INPUT; }
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'NOT', value: value, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Not', value: value, operation: [then] });
 };
 exports.Not = Not;
 var IsNull = function (then) {
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: null, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Is', value: null, operation: [then] });
 };
 exports.IsNull = IsNull;
 var IsUndefined = function (then) {
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'IS', value: undefined, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Is', value: undefined, operation: [then] });
 };
 exports.IsUndefined = IsUndefined;
 var IsNaN = function (then) {
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'ISNAN', operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'IsNaN', operation: [then] });
 };
 exports.IsNaN = IsNaN;
 var BelongTo = function (type, then) {
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'ISTYPE', value: type, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'BelongTo', value: type, operation: [then] });
 };
 exports.BelongTo = BelongTo;
 var Case = function (condition, then) {
     if (condition === void 0) { condition = false; }
     if (then === void 0) { then = null; }
     return new CaseBuilder_1.CaseBuilder({
-        type: 'CASE', value: condition, operation: [then]
+        type: 'Case', value: condition, operation: [then]
     });
 };
 exports.Case = Case;
@@ -61,7 +61,7 @@ var In = function () {
         operation = value[value.length - 1];
         value = value.slice(0, value.length - 1);
     }
-    return new CaseBuilder_1.CaseBuilder({ type: 'IN', value: value, operation: [operation] })._activate();
+    return new CaseBuilder_1.CaseBuilder({ type: 'In', value: value, operation: [operation] })._activate();
 };
 exports.In = In;
 var NotIn = function () {
@@ -74,7 +74,7 @@ var NotIn = function () {
         operation = value[value.length - 1];
         value = value.slice(0, value.length - 1);
     }
-    return new CaseBuilder_1.CaseBuilder({ type: 'NOTIN', value: value, operation: [operation] })._activate();
+    return new CaseBuilder_1.CaseBuilder({ type: 'NotIn', value: value, operation: [operation] })._activate();
 };
 exports.NotIn = NotIn;
 var InRange = function (start, end, then) {
@@ -102,18 +102,18 @@ exports.NotInRange = NotInRange;
 var Match = function (regexp, then) {
     if (regexp === void 0) { regexp = false; }
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'MATCH', value: regexp, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Match', value: regexp, operation: [then] });
 };
 exports.Match = Match;
 var NotMatch = function (regexp, then) {
     if (regexp === void 0) { regexp = false; }
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'NOTMATCH', value: regexp, operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'NotMatch', value: regexp, operation: [then] });
 };
 exports.NotMatch = NotMatch;
 var Else = function (then) {
     if (then === void 0) { then = null; }
-    return new CaseBuilder_1.CaseBuilder({ type: 'ELSE', operation: [then] });
+    return new CaseBuilder_1.CaseBuilder({ type: 'Else', operation: [then] });
 };
 exports.Else = Else;
 var when = function () {

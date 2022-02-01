@@ -1,7 +1,7 @@
 export const __NO_INPUT = '_______NOTHING';
 
 export class CaseBuilder {
-    private type: string = 'CASE'
+    private type: string = 'Case'
     private value: any = null;
     private operations: any[] = [];
     private activated: boolean = false;
@@ -61,7 +61,7 @@ export class CaseBuilder {
      */
     _activate() {
         if(this.activated) return this;
-        if (this.type === 'IN' || this.type === 'NOTIN' && this.operations.length === 0 && this.value?.length > 1) {
+        if ((this.type === 'In' || this.type === 'NotIn') && this.operations.length === 0 && this.value?.length > 1) {
             this.operations = [this.value[this.value.length - 1]];
             this.value = this.value.slice(0, this.value.length - 1);
         }
@@ -79,16 +79,16 @@ export class CaseBuilder {
      *
      */
     _validate(caseMode: boolean, value: any) {
-        return (this.type === 'ELSE') ||
-            (((this.type === 'CASE' && !!this.value && this.value !== __NO_INPUT)) ||
-                (!caseMode && ((this.type === 'IS' && this.value === value))) ||
-                (!caseMode && ((this.type === 'NOT' && this.value !== value))) ||
-                (!caseMode && ((this.type === 'IN' && this.activated && this.value.includes(value)))) ||
-                (!caseMode && ((this.type === 'NOTIN' && this.activated && !this.value.includes(value)))) ||
-                (!caseMode && ((this.type === 'MATCH' && this.value.test(value)))) ||
-                (!caseMode && ((this.type === 'NOTMATCH' && !this.value.test(value)))) ||
-                (!caseMode && ((this.type === 'ISNAN' && typeof value === 'number' && isNaN(value)))) ||
-                (!caseMode && ((this.type === 'ISTYPE' && typeof value === this.value)))
+        return (this.type === 'Else') ||
+            (((this.type === 'Case' && !!this.value && this.value !== __NO_INPUT)) ||
+                (!caseMode && ((this.type === 'Is' && this.value === value))) ||
+                (!caseMode && ((this.type === 'Not' && this.value !== value))) ||
+                (!caseMode && ((this.type === 'In' && this.activated && this.value.includes(value)))) ||
+                (!caseMode && ((this.type === 'NotIn' && this.activated && !this.value.includes(value)))) ||
+                (!caseMode && ((this.type === 'Match' && this.value.test(value)))) ||
+                (!caseMode && ((this.type === 'NotMatch' && !this.value.test(value)))) ||
+                (!caseMode && ((this.type === 'IsNaN' && typeof value === 'number' && isNaN(value)))) ||
+                (!caseMode && ((this.type === 'BelongTo' && typeof value === this.value)))
             )
     }
 }

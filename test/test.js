@@ -261,4 +261,12 @@ describe('测试基本的Case用法', () => {
     })
 
 
+    it('测试类型', () => {
+        expect(
+            when(1,
+                Is(1, () => {
+                    return 123
+                }))
+        ).to.be.equal(123)
+    })
 });
