@@ -18,15 +18,15 @@ const {
     BelongTo
 } = require("../dist");
 
-describe('测试基本的Case用法', () => {
-    it('Case满足条件即可被执行', () => {
+describe('test basic usage for When-Case', () => {
+    it('Case will be executed if the conditions are met', () => {
         const value = 2;
         expect(
             when(value, Case(value > 1, 2))
         ).to.be.equal(2);
     });
 
-    it('Case若满足多条件，第一个可被执行', () => {
+    it('If case satisfies multiple conditions, the first one can be executed', () => {
         const value = 2;
 
         expect(
@@ -48,7 +48,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('>=2');
     });
 
-    it('不返回值时表现正确', () => {
+    it('Performs correctly when no value is returned', () => {
         const value = 2;
         when(
             Case(value === 1, () => {
@@ -63,7 +63,7 @@ describe('测试基本的Case用法', () => {
         )
     })
 
-    it('Else能够正确表现', () => {
+    it('Else can behave correctly', () => {
         const value = 2;
         expect(
             when(
@@ -74,7 +74,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('>1');
     })
 
-    it('IS能够正确表现', () => {
+    it('Is can perform correctly', () => {
         const letter = 'T';
         expect(
             when(letter,
@@ -87,7 +87,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('letter is T');
     })
 
-    it('IN能够正确表现', () => {
+    it('In can perform correctly', () => {
         const letter = 'T';
         expect(
             when(letter,
@@ -100,7 +100,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('letter in group4');
     })
 
-    it('NOTIN能够正确表现', () => {
+    it('NotIn can perform correctly', () => {
         const letter = 'T';
         expect(
             when(letter,
@@ -111,7 +111,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('InRange能够正确表现', () => {
+    it('InRange can perform correctly', () => {
         const number = 87;
         expect(
             when(number,
@@ -127,7 +127,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('number in 81..100');
     })
 
-    it('NotInRange能够正确表现', () => {
+    it('NotInRange can perform correctly', () => {
         const number = 13;
         expect(
             when(number,
@@ -137,7 +137,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('number in 12~15');
     })
 
-    it('Match能够正确表现', () => {
+    it('Match can perform correctly', () => {
         const email = 'test@email.com';
         expect(
             when(email,
@@ -148,7 +148,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('email regexp');
     })
 
-    it('NotMatch能够正确表现', () => {
+    it('NotMatch can perform correctly', () => {
         const email = 'test@email.com';
         expect(
             when(email,
@@ -158,7 +158,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal('ok');
     })
 
-    it('测试then以及then的传值是否可以正常使用', () => {
+    it('Test whether then and the value passed by then can be used normally', () => {
         const number = 72;
         when(number,
             InRange(1, 20, 'number in 1..20'),
@@ -179,14 +179,14 @@ describe('测试基本的Case用法', () => {
         )
     })
 
-    it('When是否可以执行', () => {
+    it('When can be execute', () => {
         const value = 2;
         expect(
             When(value, Case(value > 1, 2))
         ).to.be.equal(2);
     });
 
-    it('没有符合条件的结果时，返回undefinded', () => {
+    it('Undefined is returned when there is no qualified result', () => {
         const value = 2;
         expect(
             When(value, Case(value < 1, 2))
@@ -200,7 +200,7 @@ describe('测试基本的Case用法', () => {
         ).to.be.equal(4);
     })
 
-    it('Else返回Object类型值', () => {
+    it('Else returns the value of "Object" type', () => {
         let data = {
             "data": 'someValue'
         }
@@ -212,7 +212,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('BelongTo可以正常使用，判断类别', () => {
+    it('Belongto can be used normally to judge the category', () => {
         expect(
             When(1,
                 BelongTo("number", '123'),
@@ -222,7 +222,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('测试IsNull是否可以使用', () => {
+    it('Test whether IsNull can be used', () => {
         expect(
             When(null,
                 IsNull('123'),
@@ -232,7 +232,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('测试IsUndefined是否可以使用', () => {
+    it('test IsUndefined', () => {
         expect(
             when(undefined,
                 IsUndefined('123')
@@ -241,7 +241,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('测试Not是否可以使用', () => {
+    it('test Not', () => {
         expect(
             when(1,
                 Not(2, '456'),
@@ -251,7 +251,7 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('测试IsNaN是否可以使用', () => {
+    it('test IsNaN', () => {
         expect(
             when(NaN,
                 IsNaN('456'),
@@ -261,12 +261,44 @@ describe('测试基本的Case用法', () => {
     })
 
 
-    it('测试类型', () => {
+    it('Test type function', () => {
         expect(
             when(1,
                 Is(1, () => {
                     return 123
                 }))
         ).to.be.equal(123)
+    })
+
+    it('Test return value with function expression ', () => {
+        const arr = ['one', 'two', 'three'];
+        expect(
+            when(1,
+                Is(1, arr.filter((item, index, self) => index >= 0 && item.includes('o'))),
+                Is(2, arr.filter((item, index, self) => index >= 1 && item.includes('o'))),
+                Is(3, arr.filter((item, index, self) => index >= 2 && item.includes('o'))),
+                Is(4, arr.filter((item, index, self) => index >= 3 && item.includes('o'))),
+            ).join(",")
+        ).to.be.equal("one,two")
+    })
+
+    it('Test async', async () => {
+        const value = 3;
+
+        function asyncFun() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(value * 100);
+                });
+            });
+        }
+
+        expect(
+            when(value,
+                Is(2, null),
+                InRange(1, 10, await asyncFun()),
+                Else('123')
+            )
+        ).to.be.equal(value * 100)
     })
 });
