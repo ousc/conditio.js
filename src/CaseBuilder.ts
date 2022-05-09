@@ -7,7 +7,7 @@ export class CaseBuilder {
     private activated: boolean = false;
 
     /**
-     * The constructor function takes a callback function as an argument, and returns an object with the type, value, and
+     * The constructor function takes a CaseBuilder function as an argument, and returns an object with the type, value, and
      * operations properties
      * @param {any} cb - any
      * @returns The object itself.
