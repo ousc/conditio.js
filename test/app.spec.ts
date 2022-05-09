@@ -1,5 +1,6 @@
-const {expect} = require('chai');
-const {
+import {describe, it} from "mocha";
+import {expect} from "chai";
+import {
     when,
     When,
     Case,
@@ -16,7 +17,7 @@ const {
     IsUndefined,
     IsNaN,
     BelongTo
-} = require("../dist");
+} from '../dist';
 
 describe('test basic usage for When-Case', () => {
     it('Case will be executed if the conditions are met', () => {
@@ -27,7 +28,7 @@ describe('test basic usage for When-Case', () => {
     });
 
     it('If case satisfies multiple conditions, the first one can be executed', () => {
-        const value = 2;
+        const value: number = 2;
 
         expect(
             when(
@@ -49,7 +50,7 @@ describe('test basic usage for When-Case', () => {
     });
 
     it('Performs correctly when no value is returned', () => {
-        const value = 2;
+        const value: number = 2;
         when(
             Case(value === 1, () => {
                 console.log(' = 1')
@@ -64,7 +65,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('Else can behave correctly', () => {
-        const value = 2;
+        const value: number = 2;
         expect(
             when(
                 Case(value === 1, '=1'),
@@ -75,7 +76,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('Is can perform correctly', () => {
-        const letter = 'T';
+        const letter: string = 'T';
         expect(
             when(letter,
                 Is('A', 'letter is A'),
@@ -88,7 +89,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('In can perform correctly', () => {
-        const letter = 'T';
+        const letter: string = 'T';
         expect(
             when(letter,
                 In('A', 'B', 'C', 'D', 'E', 'letter in group1'),
@@ -101,7 +102,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('NotIn can perform correctly', () => {
-        const letter = 'T';
+        const letter: string = 'T';
         expect(
             when(letter,
                 NotIn('A', 'B', 'C', 'D', 'E', 'letter not in ABCDE'),
@@ -112,14 +113,14 @@ describe('test basic usage for When-Case', () => {
 
 
     it('InRange can perform correctly', () => {
-        const number = 87;
+        const number: number = 87;
         expect(
             when(number,
                 InRange(1, 20, 'number in 1..20'),
                 InRange(21, 40, 'number in 21..40'),
                 InRange(41, 60, 'number in 41..60'),
                 InRange(61, 80, 'number in 61..80'),
-                InRange(81, 100, 'number in 81..100').then(res => {
+                InRange(81, 100, 'number in 81..100').then((res: number) => {
                     console.log(res);
                     return res;
                 }),
@@ -128,7 +129,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('NotInRange can perform correctly', () => {
-        const number = 13;
+        const number: number = 13;
         expect(
             when(number,
                 NotInRange(12, 15, 'number not in 12~15'),
@@ -138,7 +139,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('Match can perform correctly', () => {
-        const email = 'test@email.com';
+        const email: string = 'test@email.com';
         expect(
             when(email,
                 Match(/^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/, "phone number regexp"),
@@ -149,7 +150,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('NotMatch can perform correctly', () => {
-        const email = 'test@email.com';
+        const email: string = 'test@email.com';
         expect(
             when(email,
                 NotMatch(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, 'bad email!'),
@@ -159,20 +160,20 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('Test whether then and the value passed by then can be used normally', () => {
-        const number = 72;
+        const number: number = 72;
         when(number,
             InRange(1, 20, 'number in 1..20'),
             InRange(21, 40, 'number in 21..40'),
             InRange(41, 60, 'number in 41..60'),
             InRange(61, 80, 'number in 61..80')
-                .then((res) => {
+                .then((res: number) => {
                     console.log(res);
                     return when(number,
                         InRange(61, 70, "number in 61..70"),
                         InRange(71, 80, "number in 71..80"),
                     );
                 })
-                .then((res) => {
+                .then((res: number) => {
                     console.log(res)
                 }),
             InRange(81, 100, 'number in 81..100')
@@ -180,7 +181,7 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('When can be execute', () => {
-        const value = 2;
+        const value: number = 2;
         expect(
             When(value, Case(value > 1, 2))
         ).to.be.equal(2);
@@ -194,14 +195,14 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('When have returns，return the last value', () => {
-        const value = 2;
+        const value: number = 2;
         expect(
-            When(value, Case(value === 2, 2).then(_ => 3).then(_ => 4))
+            When(value, Case(value === 2, 2).then((_: any) => 3).then((_: any) => 4))
         ).to.be.equal(4);
     })
 
     it('Else returns the value of "Object" type', () => {
-        let data = {
+        let data: any = {
             "data": 'someValue'
         }
         expect(
@@ -216,7 +217,7 @@ describe('test basic usage for When-Case', () => {
         expect(
             When(1,
                 BelongTo("number", '123'),
-                BelongTo("else", '456'),
+                BelongTo("boolean", '456'),
             )
         ).to.be.equal('123');
     })
@@ -271,34 +272,36 @@ describe('test basic usage for When-Case', () => {
     })
 
     it('Test return value with function expression ', () => {
-        const arr = ['one', 'two', 'three'];
+        const arr: string[] = ['one', 'two', 'three'];
         expect(
             when(1,
-                Is(1, arr.filter((item, index, self) => index >= 0 && item.includes('o'))),
-                Is(2, arr.filter((item, index, self) => index >= 1 && item.includes('o'))),
-                Is(3, arr.filter((item, index, self) => index >= 2 && item.includes('o'))),
-                Is(4, arr.filter((item, index, self) => index >= 3 && item.includes('o'))),
+                Is(1, arr.filter((item, index, _) => index >= 0 && item.includes('o'))),
+                Is(2, arr.filter((item, index, _) => index >= 1 && item.includes('o'))),
+                Is(3, arr.filter((item, index, _) => index >= 2 && item.includes('o'))),
+                Is(4, arr.filter((item, index, _) => index >= 3 && item.includes('o'))),
             ).join(",")
         ).to.be.equal("one,two")
     })
 
     it('Test async', async () => {
-        const value = 3;
 
         function asyncFun() {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, _) => {
                 setTimeout(() => {
-                    resolve(value * 100);
+                    resolve(['one', 'two', 'three']);
                 });
             });
         }
 
-        expect(
-            when(value,
-                Is(2, null),
-                InRange(1, 10, await asyncFun()),
-                Else('123')
-            )
-        ).to.be.equal(value * 100)
+        const data: string[] = await asyncFun() as string[];
+
+        const type = "A"
+
+        const arr = when(type,
+            Is("A", [...data].filter((item, index, self) => self.indexOf(item) === index && !!item && index >= 0 && item.includes('o'))),
+        )
+
+        expect(arr.join(" ")).to.be.equal(['one', 'two'].join(" "));
     })
 });
+
