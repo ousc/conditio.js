@@ -4,7 +4,7 @@ A lightweight library that provides a simple and expressive way to write conditi
 
 ### Installation
 ```shell
-npm install when-case
+npm install when-case --save
 ```
 
 ### Import
