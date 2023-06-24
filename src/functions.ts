@@ -33,14 +33,14 @@ export const conditionToFn = <T>(condition: boolean | ((value: T | undefined) =>
  * @param result The result to be returned if the condition is true. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `if` statement.
  */
-export function If<T, R>(condition: boolean | ((value: T | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<T, R | undefined>) | (() => Condition<T, R>) {
+export function If<R>(condition: boolean | ((value: any | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R | undefined>) | (() => Condition<any, R>) {
     if (result === undefined) {
         return function (result?: R | (() => R)) {
-            return new Condition<T, R | undefined>(conditionToFn(condition), result);
+            return new Condition<any, R | undefined>(conditionToFn(condition), result);
         }
     }
     const fn = conditionToFn(condition);
-    return () => new Condition<T, R>(fn, result);
+    return () => new Condition<any, R>(fn, result);
 }
 
 /**
