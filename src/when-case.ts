@@ -11,12 +11,12 @@ export class Condition<T, R> {
         return this.condition(value);
     }
 
-    private getResult(value: T | undefined): any {
+    private getResult(value: T | undefined): R {
         return typeof this.result === 'function' ? (this.result as () => R)() : this.result
     }
 
-    else(defaultResult: R | (() => R)): Condition<T | undefined, R> {
-        return this.isTrue() ? this.getResult(undefined) : defaultResult;
+    else(defaultResult: R | (() => R)): R {
+        return this.isTrue() ? this.getResult(undefined) : typeof defaultResult === 'function' ? (defaultResult as () => R)() : defaultResult;
     }
 }
 
