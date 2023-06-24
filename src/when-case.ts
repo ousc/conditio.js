@@ -1,4 +1,4 @@
-import {If} from "./functions";
+import {conditionToFn, If} from "./functions";
 
 export class Condition<T, R> {
     private readonly condition: (value: T | undefined) => boolean;
@@ -17,12 +17,21 @@ export class Condition<T, R> {
         return typeof this.result === 'function' ? (this.result as () => R)() : this.result
     }
 
-    else(defaultResult: R | (() => R) | undefined): R | undefined {
+    else(defaultResult?: R | (() => R)): R | undefined {
         return this.isTrue() ? this.getResult(undefined) : typeof defaultResult === 'function' ? (defaultResult as () => R)() : defaultResult;
     }
 
-    elseIf(condition: boolean | ((value: T | undefined) => boolean), result: R | (() => R) | undefined): Condition<T, R | undefined> {
-        return this.isTrue() ? this : If(condition, result);
+    elseIf(condition: boolean | ((value: T | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<T, R>) | (() => Condition<T, R>) {
+        if (result === undefined) {
+            return function (result: R | (() => R)) {
+                return new Condition(conditionToFn(condition), result);
+            };
+        }
+        return () => (this.isTrue() ? this : new Condition<T, R>(conditionToFn(condition), result));
+    }
+
+    then(result: R | (() => R)): Condition<T, R> {
+        return new Condition(this.condition, result);
     }
 }
 
@@ -34,7 +43,10 @@ export class WhenCase<T> {
     }
 
     whenCase<U>(...args: (Condition<T, U> | (() => U))[]): U | undefined {
-        const matchedCondition = args.find(arg => (arg instanceof Condition && arg.isTrue(this.value)) || (typeof arg === 'function'));
+        const matchedCondition = args.find(arg =>
+            (arg instanceof Condition && arg.isTrue(this.value)) ||
+            (arg instanceof ((value: boolean | (() => boolean)) => Condition) && (arg as unknown as (() => Condition<T, U>))().isTrue(this.value)) ||
+            (arg !instanceof ((value: boolean | (() => boolean)) => Condition) && typeof arg === 'function'));
         if (matchedCondition instanceof Condition) {
             return matchedCondition.getResult(this.value);
         } else if (typeof matchedCondition === 'function') {

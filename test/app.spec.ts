@@ -138,8 +138,14 @@ describe('Conditions', () => {
 
         it('If should return correct result when using alone', () => {
             const a = 1;
-            const result = If(a > 1, 'a > 1').else('a <= 1');
-            expect(result).to.equal('a <= 1');
+            const result = If(a > 1)(() => {
+                return "a > 1"
+            }).elseIf(a === 1)(() => {
+                return "a === 1"
+            }).else(()=>{
+                return "a < 1"
+            })
+            expect(result).to.equal('a === 1');
         });
     });
 

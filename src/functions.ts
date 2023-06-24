@@ -1,5 +1,9 @@
 import {Condition} from "./index";
 
+export const conditionToFn = <T>(condition: boolean | ((value: T | undefined) => boolean)) => {
+    return typeof condition === 'function' ? condition : ((value: T | undefined) => condition);
+}
+
 /**
  * Creates a new `Condition` object that represents an `if` statement.
  *
@@ -12,7 +16,16 @@ import {Condition} from "./index";
  *    Else('a is less than or equal to 5')
  * )
  * or
- * const result = If(a > 5, () => 'a is greater than 5').else('a is less than or equal to 5')
+ * const result = If(a > 5)(() => {
+ *     // do something.
+ *     return 'a is greater than 5';
+ * }).elseIf(a === 5)(() => {
+ *     // do something.
+ *     return 'a is equal to 5';
+ * }).else(() => {
+ *     // do something.
+ *     return 'a is less than 5';
+ * })
  *
  * @template T Type of the value to compare.
  * @template R Type of the result to return.
@@ -20,9 +33,14 @@ import {Condition} from "./index";
  * @param result The result to be returned if the condition is true. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `if` statement.
  */
-export function If<T, R>(condition: boolean | ((value: T | undefined) => boolean), result: R | (() => R)): Condition<T, R> {
-    const fn = typeof condition === 'function' ? condition : ((value: T | undefined) => condition);
-    return new Condition<T, R>(fn, result);
+export function If<T, R>(condition: boolean | ((value: T | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<T, R | undefined>) | (() => Condition<T, R>) {
+    if (result === undefined) {
+        return function (result?: R | (() => R)) {
+            return new Condition<T, R | undefined>(conditionToFn(condition), result);
+        }
+    }
+    const fn = conditionToFn(condition);
+    return () => new Condition<T, R>(fn, result);
 }
 
 /**

@@ -24,19 +24,24 @@ const result = when(foo)(
 //or
 
 const a = 1;
-console.log(
-    when(
-        If(a > 1, 'a > 1'),
-        If(a > 0, () => 'a > 0'), // use arrow function, do something and return a result
-        () => 'a <= 0' // default result
-    )
+const result = when(
+    If(a > 1, 'a > 1'),
+    If(a > 0, () => 'a > 0'), // use arrow function, do something and return a result
+    () => 'a <= 0' // default result
 )
 
 // `If` statement can be used alone:
-const b = 2;
-console.log(
-    If(b > 1, 'b > 1').else('b <= 1')
-)
+const b = 5;
+const result = If(b > 5)(() => {
+    // do something.
+    return 'b is greater than 5';
+}).elseIf(b === 5)(() => {
+    // do something.
+    return 'b is equal to 5';
+}).else(() => {
+    // do something.
+    return 'b is less than 5';
+})
 ```
 
 ### Conditional Functions
@@ -99,14 +104,14 @@ The first parameter of the `when` function is the value to be tested. `If`, `Is`
 ```javascript
 const a = 1;
 const result = when(a)(
-  If(a > 1, () => 'a > 1'),
-  If(a > 0, () => 'a > 0'),
-  In(-1, -2, -3, () => 'a in -1/-2/-3'), // use varaible arguments
-  In([-4, -5, -6], 'a in -4/-5/-6'), // use array
-  Else(() => {
-    console.log(123);
-    return 'a <= 0';
-  })
+    If(a > 1, () => 'a > 1'),
+    If(a > 0, () => 'a > 0'),
+    In(-1, -2, -3, () => 'a in -1/-2/-3'), // use varaible arguments
+    In([-4, -5, -6], 'a in -4/-5/-6'), // use array
+    Else(() => {
+        console.log(123);
+        return 'a <= 0';
+    })
 );
 console.log(result); // output: 'a > 0'
 ```
