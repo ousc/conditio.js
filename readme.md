@@ -44,7 +44,7 @@ console.log(
 
 - `Is(value, result | fn)`: This function returns the second parameter if the first parameter is strictly equal to the given value, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `In(values, fn)`: This function returns the second parameter if the first parameter is included in the values array, otherwise returns undefined. Alternatively, the second parameter should be a function that returns the result.
+- `In(values, () => result)`: This function returns the second parameter if the first parameter is included in the values array, otherwise returns undefined. Alternatively, the second parameter should be a function that returns the result.
 
 - `Matches(regexp, result | fn)`: This function returns the second parameter if the first parameter matches the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
@@ -56,7 +56,7 @@ console.log(
 
 - `Not(condition, result | fn)`: This function returns the second parameter if the first parameter is false, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `NotIn(values, fn)`: This function returns the second parameter if the first parameter is not included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `NotIn(values, () => result)`: This function returns the second parameter if the first parameter is not included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
 - `NotMatches(regexp, result | fn)`: This function returns the second parameter if the first parameter does not match the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
@@ -71,20 +71,20 @@ The `when` function is used to conditionally execute functions based on a given 
 
 ```javascript
 const result = when(value)(
-  If(condition, result | fn),
-  Is(value, result | fn),
-  In(values, result | fn),
-  Matches(regexp, result | fn),
-  Between(min, max, result | fn),
-  BelongTo(type, result | fn),
-  Not(condition),
-  NotIn(values),
-  NotMatches(regexp),
-  NotBetween(min, max),
-  NotBelongTo(type), 
-  Else(result | fn),
-  // or you can use a function as the default result
-  // () => { // do something and return a result }
+    If(condition, result | fn),
+    Is(value, result | fn),
+    In(values, () => result),
+    Matches(regexp, result | fn),
+    Between(min, max, result | fn),
+    BelongTo(type, result | fn),
+    Not(condition, result | fn),
+    NotIn(values, () => result),
+    NotMatches(regexp, result | fn),
+    NotBetween(min, max, result | fn),
+    NotBelongTo(type, result | fn),
+    Else(result | fn),
+    // or you can use a function as the default result
+    // () => { // do something and return a result }
 );
 ```
 
