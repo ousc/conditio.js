@@ -1,185 +1,114 @@
-## when-case
-
-This is a simple syntactic sugar library that completely replaces switch/case, and has many new features, inspired by "
-when" in Kotlin.
+# `when-case`
+A lightweight library that provides a simple and expressive way to write conditional expressions with return values in JavaScript.
+## Usage
 
 ### Installation
-
+```shell
+npm install when-case
 ```
-npm install when-case --save
+
+### Import
+```javascript
+import { when, If, Is, In, Matches, Between, BelongTo, IsNaN, Else, Not, NotIn, NotMatches, NotBetween, NotBelongTo } from 'when-case';
 ```
 
-### Basic Usage
+### Quick Start
+```javascript
+const foo = 'bar';
+const result = when(foo)(
+    Is('bar', 'foo is bar'),
+    Is('baz', 'foo is baz'),
+    Else('foo is neither bar nor baz')
+);
 
-Used in modern frameworks(Vue, React, NG(soon)) and typescript
+//or
 
-```typescript
-    import {When, when, Case, Match, NotMatch, Is, In, NotIn, InRange, NotInRange, Else} from 'when-case';
-    let value: string = 'someValue';
-    when(value,
-        Case(value.length > 10, () => {
-            console.log('hello world');
-        }),
-        Is('anotherValue', () => {
-            console.log('this is another value')
-        }),
-        Else(()=>{
-            // Do something
-        })
+const a = 1;
+console.log(
+    when()(
+        If(a > 1, 'a > 1'),
+        If(a > 0, 'a > 0'),
+        Else('a <= 0')
     )
+)
 ```
 
-Basic usage, both "when" and "When" can be used.
+### Conditional Functions
+- `If(condition, result | fn)`: This function takes a condition and returns a result or function if the condition is true. Alternatively, you can pass a function as the second argument. When the first parameter is true, this function will be called and its return value will be used as the result.
+
+- `Is(value, result | fn)`: This function returns the second parameter if the first parameter is strictly equal to the given value, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+
+- `In(values, fn)`: This function returns the second parameter if the first parameter is included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+
+- `Matches(regexp, result | fn)`: This function returns the second parameter if the first parameter matches the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+
+- `Between(min, max, result | fn)`: This function returns the second parameter if the first parameter is between the given min and max, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+
+- `BelongTo(type, result | fn)`: This function returns the second parameter if the first parameter is of the given type, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+
+- `Else(result | fn)`: This function provides a default result if none of the previous conditions returned a result. If a function is provided, it will be called and its return value will be used as the final result.
+
+- `Not(condition)`: This function returns `true` if the condition is false, and `false` if the condition is true.
+
+- `NotIn(values)`: This function returns `true` if the first parameter is not included in the values array, otherwise returns false.
+
+- `NotMatches(regexp)`: This function returns `true` if the first parameter does not match the given regular expression, otherwise returns `false`.
+
+- `NotBetween(min, max)`: This function returns `true` if the first parameter is not between the given min and max, otherwise returns `false`.
+
+- `NotBelongTo(type)`: This function returns `true` if the first parameter is not of the given type, otherwise returns `false`.
+
+### `when` Function
+
+The `when` function is used to conditionally execute functions based on a given value. It is a curried function, which means it returns another function until all conditions are chained together.
+
 
 ```javascript
-    const value = 2;
-    let result = when(
-        Case(value === 1, 1),
-        Case(value < 1, ' < 1'),
-        // You can pass in an arrow function, and take the return value as the result
-        Case(value > 1, _=> 1 + value)
-    )
-    console.log(result);
+const result = when(value)(
+  If(condition, result | fn),
+  Is(value, result | fn),
+  In(values, result | fn),
+  Matches(regexp, result | fn),
+  Between(min, max, result | fn),
+  BelongTo(type, result | fn),
+  Not(condition),
+  NotIn(values),
+  NotMatches(regexp),
+  NotBetween(min, max),
+  NotBelongTo(type), 
+  Else(result | fn),
+  // or you can use a function as the default result
+  // () => { // do something and return a result }
+);
 ```
 
-console:
+The first parameter of the `when` function is the value to be tested. `If`, `Is`, `In`, `Matches`, `Between` and `BelongTo` functions will test the given value against a condition or set of conditions and execute the corresponding result function (or return the result value if one is provided).
 
-```
-3
-```
+`Else` function is provided as the default fallback and will be executed if none of the previous conditions return a result.
 
------
-Return nothing, you can just use like "if-else"
+`Not`, `NotIn`, `NotMatches`, `NotBetween` and `NotBelongTo` functions provide a way to execute a condition based on the opposite of a condition.
+
+## Example
 
 ```javascript
-    const value = 2;
-    when(
-        Case(value === 1, () => {
-            console.log(' = 1')
-        }),
-        //You can also use the wording of then
-        //when you use then continuously
-        //you can get the return value of the pre 'then'
-        Case(value < 1).then(() => {
-            return ' < 1';
-        }).then((value)=>{
-            console.log(value)
-        }),
-        Case(value > 1, () => {
-            console.log(' > 1')
-        }),
-        Else(()=>{
-            console.log('error!')
-        })
-    )
+const a = 1;
+const result = when(a)(
+  If(a > 1, () => 'a > 1'),
+  If(a > 0, () => 'a > 0'),
+  In([-1, -2, -3], () => 'a in -1/-2/-3'),
+  In([-4], 'a in -4'),
+  Else(() => {
+    console.log(123);
+    return 'a <= 0';
+  })
+);
+console.log(result); // output: 'a > 0'
 ```
 
-console:
+In this example, we first define the value of `a` as `1`, and then use the `when` function to check whether it satisfies the given conditions. The `when` function will return a function that takes in multiple conditions and returns the corresponding values based on whether the conditions are true or false.
 
-```
-> 1
-```
+In the above example, we check if `a` is greater than `1`, if it is greater than `0`, if it is included in the array `[-1, -2, -3]`, if it is included in the array `[-4]`, and finally use the `Else` function as the default result if none of the previous conditions are met.
 
-------
+Since the condition `a > 1` is not satisfied, the function moves on to the next condition `a > 0`. This condition is true, so its corresponding function is executed and returns the value `'a > 0'`. Therefore, the final value of `result` is `'a > 0'`.
 
-Usage for "In" and "InRange"
- ```javascript
-    const number = 72;
-    const arr = [159, 160, 161];
-    when(number,
-        // Input start and end range
-        InRange(1, 20, 'number in 1..20'),
-        InRange(21, 40, 'number in 21..40'),
-        InRange(41, 60, 'number in 41..60'),
-        InRange(61, 80, 'number in 61..80')
-            .then((res) => {
-                console.log(res);
-                return when(number,
-                    InRange(61, 70, "number in 61..70"),
-                    InRange(71, 80, "number in 71..80"),
-                );
-            })
-            .then((res) => {
-                console.log(res)
-            }),
-        InRange(81, 100, 'number in 81..100'),
-        // multiple values
-        In(101, 102, 105, 'number in 101..102 or 105'),
-        In(...arr, 'number in arr'),
-    )
- ```
-
-console:
-
-```
-number in 61..80
-number in 71..80
-```
-
-----
-
-"Is" usage, equivalent to Switch-Case syntax without penetration
-
-```javascript
-    const letter = 'T';
-    console.log(
-        when(letter,
-            Is('A', 'letter is A'),
-            Is('F', 'letter is F'),
-            Is('M', 'letter is M'),
-            Is('T', 'letter is T'),
-            Is('Z', 'letter is Z'),
-            Else('letter is ?')
-        )
-    )
-```
-
-console:
-
-```
-letter is T
-```
-
----------
-"Match" regular matching
-```javascript
-    when(email,
-        Match(/^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/).then(()=>{
-            console.log("match phone number regexp");
-        }),
-        Match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/).then(()=>{
-            console.log("match email regexp");
-        }),
-        Match(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{8,}$/).then(()=>{
-            console.log("match password regexp");
-        }),
-    )
-```
-console:
-
-```
-match email regexp
-```
----------
-
-| Name    | description                                                  |
-| ------- | ------------------------------------------------------------ |
-| Case    | Perform the operations if the condition is true |
-| Is      | Perform the operations if it is equal to the incoming value |
-| In      | Contains the incoming value to perform the operation |
-| InRange | Perform operations within the upper and lower limits |
-| Match   | The incoming value conforms to the regular operation |
-| Else    | Actions that will be performed by default<br>When there are multiple Else, only the first one will be executed                  |
-
-advance
-
-| Name    | description                                                  |
-| ------- | ------------------------------------------------------------ |
-| Not     | Perform the operations if it is not equal to the incoming value |
-| NotIn      | Not contains the incoming value to perform the operation |
-| NotInRange | Perform operations without the upper and lower limits |
-| NotMatch   | The incoming value don't conforms to the regular operation |
-| IsNull     | Perform the operations if the value is 'null' |
-| IsNaN     | Perform the operations if the type of the value is 'number' and value is 'NaN' |
-| IsUndefined     | Perform the operations if the value is 'undefined' |
-| BelongTo     | Perform the operations if the type of value is : "object" / "undefined" / "boolean" / "number" / "string" / "array" / "function" / "symbol" |
+You can chain multiple conditions together in this way to create more complex conditional logic.

@@ -5,10 +5,14 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
+    "esModuleInterop": true,
     "lib": [
       "dom",
       "esnext",
-      "scripthost",
+      "scripthost"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }

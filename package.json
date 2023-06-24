@@ -1,7 +1,7 @@
 {
   "name": "when-case",
-  "version": "1.0.11",
-  "description": "A simple syntactic sugar library that completely replaces switch/case, and has many new features, inspired by when in Kotlin.",
+  "version": "2.0.1",
+  "description": "A lightweight library that provides a simple and expressive way to write conditional expressions with return values in JavaScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -10,7 +10,9 @@
   },
   "scripts": {
     "test": "mocha --reporter spec",
-    "build": "tsc"
+    "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
+    "build:clean": "rm -rf ./dist",
+    "build": "npm run build:clean && npm run compile &&  node ./scripts/prepare-package-json"
   },
   "keywords": [
     "when",
@@ -19,7 +21,7 @@
     "kotlin",
     "typescript"
   ],
-  "author": "OUSC",
+  "author": "ousc",
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.3.1",
@@ -27,5 +29,13 @@
     "chai": "^4.3.4",
     "mocha": "^9.1.1",
     "typescript": "^4.4.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/lib.d.ts",
+      "require": "./dist/cjs/lib.js",
+      "import": "./dist/esm/lib.js",
+      "default": "./dist/esm/lib.js"
+    }
   }
 }
