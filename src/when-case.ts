@@ -1,3 +1,5 @@
+import {If} from "./functions";
+
 export class Condition<T, R> {
     private readonly condition: (value: T | undefined) => boolean;
     private readonly result: R | (() => R);
@@ -11,30 +13,33 @@ export class Condition<T, R> {
         return this.condition(value);
     }
 
-    private getResult(value: T | undefined): R {
+    getResult(value: T | undefined): R {
         return typeof this.result === 'function' ? (this.result as () => R)() : this.result
     }
 
-    else(defaultResult: R | (() => R)): R {
+    else(defaultResult: R | (() => R) | undefined): R | undefined {
         return this.isTrue() ? this.getResult(undefined) : typeof defaultResult === 'function' ? (defaultResult as () => R)() : defaultResult;
+    }
+
+    elseIf(condition: boolean | ((value: T | undefined) => boolean), result: R | (() => R) | undefined): Condition<T, R | undefined> {
+        return this.isTrue() ? this : If(condition, result);
     }
 }
 
 export class WhenCase<T> {
-    private value: T | undefined;
+    private readonly value: T | undefined;
 
     constructor(value: T | undefined) {
         this.value = value;
     }
 
-    whenCase(...args: any[]) {
-        const matchedCondition = args.find(arg =>
-            (arg instanceof Condition && arg.isTrue(this.value)) ||
-            typeof arg === 'function'
-        );
-        return matchedCondition ?
-            typeof matchedCondition === 'function' ?
-                matchedCondition() :
-                matchedCondition.getResult(this.value) : undefined;
+    whenCase<U>(...args: (Condition<T, U> | (() => U))[]): U | undefined {
+        const matchedCondition = args.find(arg => (arg instanceof Condition && arg.isTrue(this.value)) || (typeof arg === 'function'));
+        if (matchedCondition instanceof Condition) {
+            return matchedCondition.getResult(this.value);
+        } else if (typeof matchedCondition === 'function') {
+            return matchedCondition();
+        }
+        return undefined;
     }
 }
