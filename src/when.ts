@@ -29,11 +29,18 @@ import {Condition, WhenCase} from "./index";
  *        //or Else(() => { // do something default })
  *    )
  *
- * @param value The value to be compared against.
  * @returns The `WhenCase` object that represents the `when` statement.
+ * @param args
  */
-export function when<T>(value: T | undefined = undefined) {
-    return function (...args: (Condition<T, any> | (() => any))[]) {
-        return new WhenCase<T>(value).when(...args);
-    };
+export function when<T>(...args: (T | undefined | Condition<T, any> | (() => any))[]) {
+    if (args.length === 0) {
+        return undefined
+    }
+    if (args.every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
+        return new WhenCase<T>(undefined).whenCase(...args as (Condition<T, any> | (() => any))[]);
+    } else {
+        return function (...args2: (Condition<T, any> | (() => any))[]) {
+            return new WhenCase<T>(args[0] as (T | undefined))
+        };
+    }
 }

@@ -126,6 +126,15 @@ describe('Conditions', () => {
             );
             expect(result).to.equal(undefined);
         });
+
+        it('should directly execute the condition when no value is provided', () => {
+            const a = 1;
+            const result = when(
+                If(a > 1, 'a > 1'),
+                Else('a <= 1')
+            );
+            expect(result).to.equal('a <= 1');
+        });
     });
 
     describe('Condition', () => {

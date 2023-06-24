@@ -1,6 +1,6 @@
 {
   "name": "when-case",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A lightweight library that provides a simple and expressive way to write conditional expressions with return values in JavaScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ousc/case.js.git"
   },
   "scripts": {
-    "test": "mocha --reporter spec",
+    "test": "tsc -b ./tsconfig.spec.json && mocha ./dist/spec",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "build:clean": "rm -rf ./dist",
     "build": "npm run build:clean && npm run compile &&  node ./scripts/prepare-package-json"

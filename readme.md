@@ -25,10 +25,10 @@ const result = when(foo)(
 
 const a = 1;
 console.log(
-    when()(
+    when(
         If(a > 1, 'a > 1'),
-        If(a > 0, 'a > 0'),
-        Else('a <= 0')
+        If(a > 0, () => 'a > 0'), // use arrow function, do something and return a result
+        () => 'a <= 0' // default result
     )
 )
 ```
@@ -95,8 +95,8 @@ const a = 1;
 const result = when(a)(
   If(a > 1, () => 'a > 1'),
   If(a > 0, () => 'a > 0'),
-  In([-1, -2, -3], () => 'a in -1/-2/-3'),
-  In([-4], 'a in -4'),
+  In(-1, -2, -3, () => 'a in -1/-2/-3'), // use varaible arguments
+  In([-4, -5, -6], 'a in -4/-5/-6'), // use array
   Else(() => {
     console.log(123);
     return 'a <= 0';

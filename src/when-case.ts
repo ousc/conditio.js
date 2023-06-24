@@ -16,6 +16,7 @@ export class Condition<T, R> {
         return this.compare(value) ? result : defaultResult;
     }
 }
+
 export class WhenCase<T> {
     private value: T | undefined;
 
@@ -23,22 +24,14 @@ export class WhenCase<T> {
         this.value = value;
     }
 
-    when(...args: any[]) {
-        if (args.length === 0) {
-            return undefined
-        }
-        if (args.every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
-            const matchedCondition = args.find(arg =>
-                (arg instanceof Condition && arg.compare(this.value)) ||
-                typeof arg === 'function'
-            );
-            return matchedCondition ?
-                typeof matchedCondition === 'function' ?
-                    matchedCondition() :
-                    matchedCondition.getResult(this.value, undefined) : undefined;
-        } else {
-            this.value = args[0];
-            return this;
-        }
+    whenCase(...args: any[]) {
+        const matchedCondition = args.find(arg =>
+            (arg instanceof Condition && arg.compare(this.value)) ||
+            typeof arg === 'function'
+        );
+        return matchedCondition ?
+            typeof matchedCondition === 'function' ?
+                matchedCondition() :
+                matchedCondition.getResult(this.value, undefined) : undefined;
     }
 }
