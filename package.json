@@ -9,7 +9,7 @@
     "url": "git+https://github.com/ousc/case.js.git"
   },
   "scripts": {
-    "test": "tsc -b ./tsconfig.spec.json && mocha ./dist/spec",
+    "test": "npm run build:clean && npm run compile && tsc -b ./tsconfig.spec.json && mocha ./dist/spec/test/app.spec.js",
     "compile": "tsc -b ./tsconfig.cjs.json ./tsconfig.esm.json ./tsconfig.types.json",
     "build:clean": "rm -rf ./dist",
     "build": "npm run build:clean && npm run compile &&  node ./scripts/prepare-package-json"

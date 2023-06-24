@@ -22,7 +22,7 @@ import {Condition, WhenCase} from "./index";
  *
  *    or
  *
- *    when()(
+ *    when(
  *        If(a === 1, () => { // do something }),
  *        If(a === 2, () => { // do something else }),
  *        () => { // do something default }
@@ -40,7 +40,7 @@ export function when<T>(...args: (T | undefined | Condition<T, any> | (() => any
         return new WhenCase<T>(undefined).whenCase(...args as (Condition<T, any> | (() => any))[]);
     } else {
         return function (...args2: (Condition<T, any> | (() => any))[]) {
-            return new WhenCase<T>(args[0] as (T | undefined))
+            return new WhenCase<T>(args[0] as (T | undefined)).whenCase(...args2);
         };
     }
 }

@@ -6,6 +6,13 @@ import {Condition} from "./when-case";
  * @example
  *
  * const result = If(a > 5, () => 'a is greater than 5') or If(a > 5, 'a is greater than 5')
+ * you can use it in `when` statement or alone.
+ * const result = when(a)(
+ *    If(a > 5, () => 'a is greater than 5'),
+ *    Else('a is less than or equal to 5')
+ * )
+ * or
+ * const result = If(a > 5, () => 'a is greater than 5').else('a is less than or equal to 5')
  *
  * @template T Type of the value to compare.
  * @template R Type of the result to return.
@@ -13,8 +20,8 @@ import {Condition} from "./when-case";
  * @param result The result to be returned if the condition is true. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `if` statement.
  */
-export function If<T, R>(condition: boolean | ((value: T) => boolean), result: R | (() => R)): Condition<T, R> {
-    const fn = typeof condition === 'function' ? condition : ((value: T) => condition);
+export function If<T, R>(condition: boolean | ((value: T | undefined) => boolean), result: R | (() => R)): Condition<T, R> {
+    const fn = typeof condition === 'function' ? condition : ((value: T | undefined) => condition);
     return new Condition<T, R>(fn, result);
 }
 
@@ -23,7 +30,8 @@ export function If<T, R>(condition: boolean | ((value: T) => boolean), result: R
  *
  * @example
  *
- * const result = Is(5, () => 'a is 5') or Is(5, 'a is 5')
+ * Is(5, () => 'a is 5') or Is(5, 'a is 5')
+ * must use in when() to compare
  * must pass a value to when() for comparison
  *
  * @template T Type of the value to compare.
@@ -33,7 +41,7 @@ export function If<T, R>(condition: boolean | ((value: T) => boolean), result: R
  * @returns The `Condition` object that represents the `equals` statement.
  */
 export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value === expected, result);
+    return new Condition<T, R>((value: T | undefined) => value === expected, result);
 }
 
 /**
@@ -41,7 +49,8 @@ export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  *
  * @example
  *
- * const result = Not(5, () => 'a is not 5') or Not(5, 'a is not 5')
+ * Not(5, () => 'a is not 5') or Not(5, 'a is not 5')
+ * must use in when() to compare
  * must pass a value to when() for comparison
  *
  * @template T Type of the value to compare.
@@ -51,7 +60,7 @@ export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  * @returns The `Condition` object that represents the `not equals` statement.
  */
 export function Not<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value !== expected, result);
+    return new Condition<T, R>((value: T | undefined) => value !== expected, result);
 }
 
 
@@ -61,12 +70,13 @@ export function Not<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  * @example
  *
  * In(-1, -2, -3, () => 'a is in -1/-2/-3') or In([-1, -2, -3], () => 'a is in -1/-2/-3')
+ * must use in when() to compare
  * must pass a value to when() for comparison
  *
  * @param array The array to search for a match.
  * @returns The `Condition` object that represents the `contains` statement.
  */
-export function In<T, R>(...array: (T[] | T | (() => R))[]): Condition<T, (() => R)> {
+export function In<T, R>(...array: ((T | undefined)[] | T | undefined | (() => R))[]): Condition<T, (() => R)> {
     if (array.length === 0) throw new Error('In() must pass at least one value');
     if (array[0] instanceof Array && array.length === 2) {
         const arr = array[0] as any[];
@@ -82,15 +92,16 @@ export function In<T, R>(...array: (T[] | T | (() => R))[]): Condition<T, (() =>
  *
  * @example
  *
- *  const result = NotIn(-1, -2, -3, () => 'a is not in -1/-2/-3') or NotIn([-1, -2, -3], () => 'a is not in -1/-2/-3')
- *  must pass a value to when() for comparison
+ * const result = NotIn(-1, -2, -3, () => 'a is not in -1/-2/-3') or NotIn([-1, -2, -3], () => 'a is not in -1/-2/-3')
+ * must use in when() to compare
+ * must pass a value to when() for comparison
  *
- *  @template T Type of the value to compare.
- *  @template R Type of the result to return.
- *  @param array The array to search for a match.
- *  @returns The `Condition` object that represents the `not contains` statement.
+ * @template T Type of the value to compare.
+ * @template R Type of the result to return.
+ * @param array The array to search for a match.
+ * @returns The `Condition` object that represents the `not contains` statement.
  */
-export function NotIn<T, R>(...array: (T[] | T | (() => R))[]): Condition<T, (() => R)> {
+export function NotIn<T, R>(...array: ((T | undefined)[] | T | undefined | (() => R))[]): Condition<T, (() => R)> {
     if (array.length === 0) throw new Error('NotIn() must pass at least one value');
     if (array[0] instanceof Array && array.length === 2) {
         const arr = array[0] as any[];
@@ -107,6 +118,7 @@ export function NotIn<T, R>(...array: (T[] | T | (() => R))[]): Condition<T, (()
  * @example
  *
  * Matches(/^[A-Z]/, () => 'starts with uppercase') or Matches(/^[A-Z]/, 'starts with uppercase')
+ * must use in when() to compare
  * must pass a value to when() for regex comparison
  *
  * @template R Type of the result to return.
@@ -115,7 +127,7 @@ export function NotIn<T, R>(...array: (T[] | T | (() => R))[]): Condition<T, (()
  * @returns The `Condition` object that represents the `match` statement.
  */
 export function Matches<R>(regexp: RegExp, result: R | (() => R)): Condition<string, R> {
-    return new Condition<string, R>((value: string) => regexp.test(value), result);
+    return new Condition<string, R>((value: string | undefined) => value != undefined && regexp.test(value), result);
 }
 
 /**
@@ -124,6 +136,7 @@ export function Matches<R>(regexp: RegExp, result: R | (() => R)): Condition<str
  * @example
  *
  * NotMatches(/^[A-Z]/, () => 'does not start with uppercase') or NotMatches(/^[A-Z]/, 'does not start with uppercase')
+ * must use in when() to compare
  * must pass a value to when() for regex comparison
  *
  * @template R Type of the result to return.
@@ -132,7 +145,7 @@ export function Matches<R>(regexp: RegExp, result: R | (() => R)): Condition<str
  * @returns The `Condition` object that represents the `not match` statement.
  */
 export function NotMatches<R>(regexp: RegExp, result: R | (() => R)): Condition<string, R> {
-    return new Condition<string, R>((value: string) => !regexp.test(value), result);
+    return new Condition<string, R>((value: string | undefined) => value != undefined && !regexp.test(value), result);
 }
 
 /**
@@ -141,6 +154,7 @@ export function NotMatches<R>(regexp: RegExp, result: R | (() => R)): Condition<
  * @example
  *
  * BelongTo('string', 'a is a string') or BelongTo('string', () => 'a is a string')
+ * must use in when() to compare
  * must pass a value to when() for type comparison
  *
  * @template R Type of the result to return.
@@ -158,6 +172,7 @@ export function BelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' | '
  * @example
  *
  * NotBelongTo('string', 'a is not a string') or NotBelongTo('string', () => 'a is not a string')
+ * must use in when() to compare
  * must pass a value to when() for type comparison
  *
  * @template R Type of the result to return.
@@ -175,6 +190,7 @@ export function NotBelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' 
  * @example
  *
  * IsNaN('a is NaN') or IsNaN(() => 'a is NaN')
+ * must use in when() to compare
  * must pass a value to when() for NaN comparison
  *
  * @template R Type of the result to return.
@@ -182,7 +198,7 @@ export function NotBelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' 
  * @returns The `Condition` object that represents the `is NaN` statement.
  */
 export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
-    return new Condition<number, R>((value: number) => Number.isNaN(value), result);
+    return new Condition<number, R>((value: number | undefined) => Number.isNaN(value), result);
 }
 
 /**
@@ -191,6 +207,7 @@ export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
  * @example
  *
  * Between(1, 10, 'a is between 1 and 10') or Between(1, 10, () => 'a is between 1 and 10')
+ * must use in when() to compare
  * must pass a value to when() for comparison
  *
  * @template T Type of the value to compare.
@@ -200,7 +217,7 @@ export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
  * @param result The result to be returned if the value is between the minimum and maximum values. It can be a value of type `R` or a function that returns a value of type `R`.
  */
 export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value >= min && value <= max, result);
+    return new Condition<T, R>((value: T | undefined) => value !== undefined && value >= min && value <= max, result);
 }
 
 /**
@@ -209,6 +226,7 @@ export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<
  * @example
  *
  * NotBetween(1, 10, 'a is not between 1 and 10') or NotBetween(1, 10, () => 'a is not between 1 and 10')
+ * must use in when() to compare
  * must pass a value to when() for comparison
  *
  * @template T Type of the value to compare.
@@ -219,7 +237,7 @@ export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<
  * @returns The `Condition` object that represents the `not between` statement.
  */
 export function NotBetween<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value < min || value > max, result);
+    return new Condition<T, R>((value: T | undefined) => value !== undefined && (value < min || value > max), result);
 }
 
 /**
@@ -228,7 +246,9 @@ export function NotBetween<T, R>(min: T, max: T, result: R | (() => R)): Conditi
  * @example
  *
  * Else('no condition is matched') or Else(() => 'no condition is matched')
- * in fact, you can use an arrow function as default: When()(..., () => 'no condition is matched')
+ * must use in when() to compare
+ * in fact, you can use an arrow function as default instead of Else(...)
+ * example: when(..., () => 'no condition is matched')
  *
  * @template R Type of the result to return.
  * @param result The result to be returned if no condition is matched. It can be a value of type `R` or a function that returns a value of type `R`.

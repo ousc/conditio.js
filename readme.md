@@ -31,6 +31,12 @@ console.log(
         () => 'a <= 0' // default result
     )
 )
+
+// `If` statement can be used alone:
+const b = 2;
+console.log(
+    If(b > 1, 'b > 1').else('b <= 1')
+)
 ```
 
 ### Conditional Functions
