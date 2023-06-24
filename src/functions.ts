@@ -1,4 +1,4 @@
-import {Condition} from "./when-case";
+import {Condition} from "./index";
 
 /**
  * Creates a new `Condition` object that represents an `if` statement.
