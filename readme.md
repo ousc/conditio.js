@@ -44,7 +44,7 @@ console.log(
 
 - `Is(value, result | fn)`: This function returns the second parameter if the first parameter is strictly equal to the given value, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `In(values, fn)`: This function returns the second parameter if the first parameter is included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `In(values, fn)`: This function returns the second parameter if the first parameter is included in the values array, otherwise returns undefined. Alternatively, the second parameter should be a function that returns the result.
 
 - `Matches(regexp, result | fn)`: This function returns the second parameter if the first parameter matches the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
@@ -54,15 +54,15 @@ console.log(
 
 - `Else(result | fn)`: This function provides a default result if none of the previous conditions returned a result. If a function is provided, it will be called and its return value will be used as the final result.
 
-- `Not(condition)`: This function returns `true` if the condition is false, and `false` if the condition is true.
+- `Not(condition, result | fn)`: This function returns the second parameter if the first parameter is false, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `NotIn(values)`: This function returns `true` if the first parameter is not included in the values array, otherwise returns false.
+- `NotIn(values, fn)`: This function returns the second parameter if the first parameter is not included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `NotMatches(regexp)`: This function returns `true` if the first parameter does not match the given regular expression, otherwise returns `false`.
+- `NotMatches(regexp, result | fn)`: This function returns the second parameter if the first parameter does not match the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `NotBetween(min, max)`: This function returns `true` if the first parameter is not between the given min and max, otherwise returns `false`.
+- `NotBetween(min, max, result | fn)`: This function returns the second parameter if the first parameter is not between the given min and max, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
-- `NotBelongTo(type)`: This function returns `true` if the first parameter is not of the given type, otherwise returns `false`.
+- `NotBelongTo(type, result | fn)`: This function returns the second parameter if the first parameter is not of the given type, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
 
 ### `when` Function
 
