@@ -1,4 +1,4 @@
-import {conditionToFn, If} from "./functions";
+import {conditionToFn} from "./functions";
 
 export class Condition<T, R> {
     private readonly condition: (value: T | undefined) => boolean;
@@ -43,14 +43,20 @@ export class WhenCase<T> {
     }
 
     whenCase<U>(...args: (Condition<T, U> | (() => U))[]): U | undefined {
-        const matchedCondition = args.find(arg =>
+        const conditions = args.map(item => {
+            if (typeof item === 'function' && (item() as any).constructor.name === Condition.name) {
+                return item();
+            } else {
+                return item;
+            }
+        });
+        const matchedCondition = conditions.find(arg =>
             (arg instanceof Condition && arg.isTrue(this.value)) ||
-            (arg instanceof ((value: boolean | (() => boolean)) => Condition) && (arg as unknown as (() => Condition<T, U>))().isTrue(this.value)) ||
-            (arg !instanceof ((value: boolean | (() => boolean)) => Condition) && typeof arg === 'function'));
+            (typeof arg === 'function'));
         if (matchedCondition instanceof Condition) {
             return matchedCondition.getResult(this.value);
         } else if (typeof matchedCondition === 'function') {
-            return matchedCondition();
+            return (matchedCondition as any)();
         }
         return undefined;
     }

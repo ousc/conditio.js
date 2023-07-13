@@ -41,6 +41,7 @@ describe('Conditions', () => {
         it('should return correct result using In', () => {
             const value = 1;
             const result = when(value)(
+                In(4, 5, 6, () => 'not in'),
                 In(1, 2, 3, () => 'in'),
                 Else('not in')
             );
@@ -121,19 +122,20 @@ describe('Conditions', () => {
 
         it('should return correct result using Else as default', () => {
             const value = 'hello';
-            const result = when(value)(
+            const result: string = when(value)(
                 Is('world', 'not matched')
             );
             expect(result).to.equal(undefined);
         });
 
         it('should directly execute the condition when no value is provided', () => {
-            const a = 1;
+            const a = 3;
             const result = when(
                 If(a > 1, 'a > 1'),
+                If(a < 2, 'a < 2'),
                 Else('a <= 1')
             );
-            expect(result).to.equal('a <= 1');
+            expect(result).to.equal('a > 1');
         });
 
         it('If should return correct result when using alone', () => {
@@ -142,7 +144,7 @@ describe('Conditions', () => {
                 return "a > 1"
             }).elseIf(a === 1)(() => {
                 return "a === 1"
-            }).else(()=>{
+            }).else(() => {
                 return "a < 1"
             })
             expect(result).to.equal('a === 1');

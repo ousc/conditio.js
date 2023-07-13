@@ -1,6 +1,6 @@
 {
   "name": "when-case",
-  "version": "2.1.2",
+  "version": "2.1.6",
   "description": "A lightweight library that provides a simple and expressive way to write conditional expressions with return values in JavaScript.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
