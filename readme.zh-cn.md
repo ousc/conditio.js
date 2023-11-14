@@ -55,19 +55,19 @@ const result = If(b > 5)(() => {
 
 - `Between(min, max, result | () => result)`: 本函数返回第二个参数，如果第一个参数在给定的最小值和最大值之间，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `BelongTo(type, result | () => result)`: This function returns the second parameter if the first parameter is of the given type, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `BelongTo(type, result | () => result)`: 本函数返回第二个参数，如果第一个参数是给定类型的，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `Else(result | () => result)`: This function provides a default result if none of the previous conditions returned a result. If a function is provided, it will be called and its return value will be used as the final result.
+- `Else(result | () => result)`: 本函数提供了一个默认结果，如果前面的条件都没有返回结果。如果提供了一个函数，它将被调用，并将其返回值用作最终结果。
 
-- `Not(condition, result | () => result)`: This function returns the second parameter if the first parameter is false, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `Not(condition, result | () => result)`: 本函数返回第二个参数，如果第一个参数为假，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `NotIn(arrayOrVararg, () => result)`: This function returns the second parameter if the first parameter is not included in the values array, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `NotIn(arrayOrVararg, () => result)`: 本函数返回第二个参数，如果第一个参数不包含在值数组中，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `NotMatches(regexp, result | () => result)`: This function returns the second parameter if the first parameter does not match the given regular expression, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `NotMatches(regexp, result | () => result)`: 本函数返回第二个参数，如果第一个参数不匹配给定的正则表达式，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `NotBetween(min, max, result | () => result)`: This function returns the second parameter if the first parameter is not between the given min and max, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `NotBetween(min, max, result | () => result)`: 本函数返回第二个参数，如果第一个参数不在给定的最小值和最大值之间，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
-- `NotBelongTo(type, result | () => result)`: This function returns the second parameter if the first parameter is not of the given type, otherwise returns undefined. Alternatively, the second parameter can also be a function that returns the result.
+- `NotBelongTo(type, result | () => result)`: 本函数返回第二个参数，如果第一个参数不是给定类型的，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
 
 ### `when` 函数
 
