@@ -7,7 +7,7 @@
   "types": "dist/types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ousc/case.js.git"
+    "url": "git+https://github.com/ousc/conditio.git"
   },
   "scripts": {
     "test": "npm run build:clean && npm run compile && tsc -b ./tsconfig.spec.json && mocha ./dist/spec/test/app.spec.js",
