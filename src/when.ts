@@ -30,17 +30,44 @@ import {Condition, WhenCase} from "./index";
  *    )
  *
  * @returns The `WhenCase` object that represents the `when` statement.
- * @param args
+ * @param val
+ * @param cond
  */
-export function when<T>(...args: (T | undefined | Condition<T, any> | (() => any))[]) {
-    if (args.length === 0) {
+export type Cond<T, R> = Condition<T, R> | (() => R) | ((result: ((() => R) | R)) => Condition<T, R>) | (() => Condition<T, R>);
+/**
+ * A utility function that allows you to define conditional branching based on a value or condition.
+ *
+ * @returns The result of the first matching condition or undefined if no conditions match.
+ * @param val The value.
+ */
+export function when<T = undefined, R = any>(val: T): R;/**
+ * A utility function that allows you to define conditional branching based on a value or condition.
+ *
+ * @param cond - The conditions to check.
+ * @returns The result of the first matching condition or undefined if no conditions match.
+ */
+export function when<T = undefined, R = any>(
+    ...cond: Cond<T, R>[]
+): R;
+/**
+ * A utility function that allows you to define conditional branching based on a value or condition.
+ *
+ * @param valOrCond - The value or condition to check.
+ * @param cond - Additional conditions to check.
+ * @returns The result of the first matching condition or undefined if no conditions match.
+ */
+export function when<T = any, R = any>(
+    valOrCond: T | Cond<T, R>,
+    ...cond: Cond<T, R>[]
+) {
+    if (valOrCond === undefined) {
         return undefined
     }
-    if (args.every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
-        return new WhenCase<T>(undefined).whenCase(...args as (Condition<T, any> | (() => any))[]);
+    if ([valOrCond, ...cond].every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
+        return new WhenCase<T>(undefined as unknown as T).whenCase(...[valOrCond, ...cond] as Cond<T, R>[]);
     } else {
-        return function (...args2: (Condition<T, any> | (() => any))[]) {
-            return new WhenCase<T>(args[0] as (T | undefined)).whenCase(...args2);
+        return function (...args2: (Condition<T, R> | (() => R))[]) {
+            return new WhenCase<T>(valOrCond as T).whenCase<R>(...args2);
         };
     }
 }

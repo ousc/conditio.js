@@ -1,27 +1,28 @@
 import {conditionToFn} from "./functions";
+import {Cond} from "./when";
 
-export class Condition<T, R> {
-    private readonly condition: (value: T | undefined) => boolean;
+export class Condition<T = any, R = any> {
+    private readonly condition: (value: T) => boolean;
     private readonly result: R | (() => R);
 
-    constructor(condition: (value: T | undefined) => boolean, result: R | (() => R)) {
+    constructor(condition: (value: T) => boolean, result: R | (() => R)) {
         this.condition = condition;
         this.result = result;
     }
 
-    isTrue(value: T | undefined = undefined): boolean {
+    isTrue(value: T = undefined as unknown as T): boolean {
         return this.condition(value);
     }
 
-    getResult(value: T | undefined): R {
+    getResult(value: T): R {
         return typeof this.result === 'function' ? (this.result as () => R)() : this.result
     }
 
-    else(defaultResult?: R | (() => R)): R | undefined {
-        return this.isTrue() ? this.getResult(undefined) : typeof defaultResult === 'function' ? (defaultResult as () => R)() : defaultResult;
+    else(defaultResult?: R | (() => R)): R {
+        return this.isTrue() ? this.getResult(undefined as unknown as T) : typeof defaultResult === 'function' ? (defaultResult as () => R)() : defaultResult as R;
     }
 
-    elseIf(condition: boolean | ((value: T | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<T, R>) | (() => Condition<T, R>) {
+    elseIf(condition: boolean | ((value: T) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<T, R>) | (() => Condition<T, R>) {
         if (result === undefined) {
             return function (result: R | (() => R)) {
                 return new Condition(conditionToFn(condition), result);
@@ -36,28 +37,28 @@ export class Condition<T, R> {
 }
 
 export class WhenCase<T> {
-    private readonly value: T | undefined;
+    private readonly value: T;
 
-    constructor(value: T | undefined) {
+    constructor(value: T) {
         this.value = value;
     }
 
-    whenCase<U>(...args: (Condition<T, U> | (() => U))[]): U | undefined {
+    whenCase<U>(...args: Cond<T, U>[]): U {
         const conditions = args.map(item => {
-            if (typeof item === 'function' && (item() as any).constructor.name === Condition.name) {
-                return item();
+            if (typeof item === 'function' && ((item as (() => U))() as any).constructor.name === Condition.name) {
+                return (item as (() => U))();
             } else {
                 return item;
             }
         });
-        const matchedCondition = conditions.find(arg =>
+        const reached = conditions.find(arg =>
             (arg instanceof Condition && arg.isTrue(this.value)) ||
             (typeof arg === 'function'));
-        if (matchedCondition instanceof Condition) {
-            return matchedCondition.getResult(this.value);
-        } else if (typeof matchedCondition === 'function') {
-            return (matchedCondition as any)();
+        if (reached instanceof Condition) {
+            return reached.getResult(this.value);
+        } else if (typeof reached === 'function') {
+            return (reached as any)();
         }
-        return undefined;
+        return undefined as unknown as U;
     }
 }

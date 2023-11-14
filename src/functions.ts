@@ -1,7 +1,7 @@
 import {Condition} from "./index";
 
-export const conditionToFn = <T>(condition: boolean | ((value: T | undefined) => boolean)) => {
-    return typeof condition === 'function' ? condition : ((value: T | undefined) => condition);
+export const conditionToFn = <T>(condition: boolean | ((value: T) => boolean)) => {
+    return typeof condition === 'function' ? condition : ((value: T) => condition);
 }
 
 /**
@@ -33,10 +33,10 @@ export const conditionToFn = <T>(condition: boolean | ((value: T | undefined) =>
  * @param result The result to be returned if the condition is true. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `if` statement.
  */
-export function If<R>(condition: boolean | ((value: any | undefined) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R | undefined>) | (() => Condition<any, R>) {
+export function If<R = any>(condition: boolean | ((value: any) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R>) | (() => Condition<any, R>) {
     if (result === undefined) {
         return function (result?: R | (() => R)) {
-            return new Condition<any, R | undefined>(conditionToFn(condition), result);
+            return new Condition<any, R>(conditionToFn(condition), result as R);
         }
     }
     const fn = conditionToFn(condition);
@@ -59,7 +59,7 @@ export function If<R>(condition: boolean | ((value: any | undefined) => boolean)
  * @returns The `Condition` object that represents the `equals` statement.
  */
 export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T | undefined) => value === expected, result);
+    return new Condition<T, R>((value: T) => value === expected, result);
 }
 
 /**
@@ -78,7 +78,7 @@ export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  * @returns The `Condition` object that represents the `not equals` statement.
  */
 export function Not<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T | undefined) => value !== expected, result);
+    return new Condition<T, R>((value: T) => value !== expected, result);
 }
 
 
@@ -94,7 +94,7 @@ export function Not<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  * @param array The array to search for a match.
  * @returns The `Condition` object that represents the `contains` statement.
  */
-export function In<T, R>(...array: ((T | undefined)[] | T | undefined | (() => R))[]): Condition<T, (() => R)> {
+export function In<T, R>(...array: ((T)[] | T | (() => R))[]): Condition<T, (() => R)> {
     if (array.length === 0) throw new Error('In() must pass at least one value');
     if (array[0] instanceof Array && array.length === 2) {
         const arr = array[0] as any[];
@@ -119,7 +119,7 @@ export function In<T, R>(...array: ((T | undefined)[] | T | undefined | (() => R
  * @param array The array to search for a match.
  * @returns The `Condition` object that represents the `not contains` statement.
  */
-export function NotIn<T, R>(...array: ((T | undefined)[] | T | undefined | (() => R))[]): Condition<T, (() => R)> {
+export function NotIn<T, R>(...array: ((T)[] | T | (() => R))[]): Condition<T, (() => R)> {
     if (array.length === 0) throw new Error('NotIn() must pass at least one value');
     if (array[0] instanceof Array && array.length === 2) {
         const arr = array[0] as any[];
@@ -145,7 +145,7 @@ export function NotIn<T, R>(...array: ((T | undefined)[] | T | undefined | (() =
  * @returns The `Condition` object that represents the `match` statement.
  */
 export function Matches<R>(regexp: RegExp, result: R | (() => R)): Condition<string, R> {
-    return new Condition<string, R>((value: string | undefined) => value != undefined && regexp.test(value), result);
+    return new Condition<string, R>((value: string) => value != undefined && regexp.test(value), result);
 }
 
 /**
@@ -163,7 +163,7 @@ export function Matches<R>(regexp: RegExp, result: R | (() => R)): Condition<str
  * @returns The `Condition` object that represents the `not match` statement.
  */
 export function NotMatches<R>(regexp: RegExp, result: R | (() => R)): Condition<string, R> {
-    return new Condition<string, R>((value: string | undefined) => value != undefined && !regexp.test(value), result);
+    return new Condition<string, R>((value: string) => value != undefined && !regexp.test(value), result);
 }
 
 /**
@@ -216,7 +216,7 @@ export function NotBelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' 
  * @returns The `Condition` object that represents the `is NaN` statement.
  */
 export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
-    return new Condition<number, R>((value: number | undefined) => Number.isNaN(value), result);
+    return new Condition<number, R>((value: number) => Number.isNaN(value), result);
 }
 
 /**
@@ -235,7 +235,7 @@ export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
  * @param result The result to be returned if the value is between the minimum and maximum values. It can be a value of type `R` or a function that returns a value of type `R`.
  */
 export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T | undefined) => value !== undefined && value >= min && value <= max, result);
+    return new Condition<T, R>((value: T) => value !== undefined && value >= min && value <= max, result);
 }
 
 /**
@@ -255,7 +255,7 @@ export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<
  * @returns The `Condition` object that represents the `not between` statement.
  */
 export function NotBetween<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T | undefined) => value !== undefined && (value < min || value > max), result);
+    return new Condition<T, R>((value: T) => value !== undefined && (value < min || value > max), result);
 }
 
 /**
