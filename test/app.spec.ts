@@ -22,7 +22,7 @@ describe('Conditions', () => {
     describe('when', () => {
         it('should return correct result using Equals', () => {
             const value = 5;
-            const result = when(value)(
+            const result: string = when(value)(
                 Is(5, 'equal'),
                 Else('not equal')
             );
@@ -48,10 +48,29 @@ describe('Conditions', () => {
             expect(result).to.equal('in');
         });
 
+        it('should return correct result using In Array[]', () => {
+            const value = 1;
+            const result = when(value)(
+                In([4, 5, 6], () => 'not in'),
+                In([1, 2, 3], () => 'in'),
+                Else('not in')
+            );
+            expect(result).to.equal('in');
+        });
+
         it('should return correct result using NotIn', () => {
             const value = 4;
             const result = when(value)(
                 NotIn(1, 2, 3, () => 'not in'),
+                Else('in')
+            );
+            expect(result).to.equal('not in');
+        });
+
+        it('should return correct result using NotIn Array[]', () => {
+            const value = 4;
+            const result = when(value)(
+                NotIn([1, 2, 3], () => 'not in'),
                 Else('in')
             );
             expect(result).to.equal('not in');
@@ -140,7 +159,7 @@ describe('Conditions', () => {
 
         it('If should return correct result when using alone', () => {
             const a = 1;
-            const result = If<string>(a > 1)(() => {
+            const result: string = If(a > 1)(() => {
                 return "a > 1"
             }).elseIf(a === 1)(() => {
                 return "a === 1"
