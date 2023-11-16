@@ -9,22 +9,23 @@ export const conditionToFn = <T>(condition: boolean | ((value: T) => boolean)) =
  *
  * @example
  *
- * const result = If(a > 5, () => 'a is greater than 5') or If(a > 5, 'a is greater than 5')
+ * const v = 1;
+ * const result = If(v > 5, () => 'v is greater than 5') or If(v > 5, 'v is greater than 5')
  * you can use it in `when` statement or alone.
- * const result = when(a)(
- *    If(a > 5, () => 'a is greater than 5'),
- *    Else('a is less than or equal to 5')
+ * const result = when(v)(
+ *    If(v > 5, () => 'v is greater than 5'),
+ *    Else('v is less than or equal to 5')
  * )
  * or
- * const result = If(a > 5)(() => {
+ * const result = If(v > 5)(() => {
  *     // do something.
- *     return 'a is greater than 5';
- * }).elseIf(a === 5)(() => {
+ *     return 'v is greater than 5';
+ * }).elseIf(v === 5)(() => {
  *     // do something.
- *     return 'a is equal to 5';
+ *     return 'v is equal to 5';
  * }).else(() => {
  *     // do something.
- *     return 'a is less than 5';
+ *     return 'v is less than 5';
  * })
  *
  * @template T Type of the value to compare.
@@ -35,12 +36,10 @@ export const conditionToFn = <T>(condition: boolean | ((value: T) => boolean)) =
  */
 export function If<R = any>(condition: boolean | ((value: any) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R>) | (() => Condition<any, R>) {
     if (result === undefined) {
-        return function (result?: R | (() => R)) {
-            return new Condition<boolean, R>(conditionToFn(condition), result as R);
-        }
+        return (result?: R | (() => R)) => new Condition<any, R>(conditionToFn(condition), result as R)
     }
     const fn = conditionToFn(condition);
-    return () => new Condition<boolean, R>(fn, result);
+    return () => new Condition<any, R>(fn, result);
 }
 
 /**
@@ -48,9 +47,10 @@ export function If<R = any>(condition: boolean | ((value: any) => boolean), resu
  *
  * @example
  *
- * Is(5, () => 'a is 5') or Is(5, 'a is 5')
+ * const v = 1;
+ * Is(5, () => 'v is 5') or Is(5, 'v is 5')
  * must use in when() to compare
- * must pass a value to when() for comparison
+ * must pass v value to when() for comparison
  *
  * @template T Type of the value to compare.
  * @template R Type of the result to return.
@@ -67,9 +67,10 @@ export function Is<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  *
  * @example
  *
- * Not(5, () => 'a is not 5') or Not(5, 'a is not 5')
+ * const v = 1;
+ * Not(5, () => 'v is not 5') or Not(5, 'v is not 5')
  * must use in when() to compare
- * must pass a value to when() for comparison
+ * must pass v value to when() for comparison
  *
  * @template T Type of the value to compare.
  * @template R Type of the result to return.
@@ -87,7 +88,8 @@ export function Not<T, R>(expected: T, result: R | (() => R)): Condition<T, R> {
  *
  * @example
  *
- * In(-1, -2, -3, () => 'a is in -1/-2/-3') or In([-1, -2, -3], () => 'a is in -1/-2/-3')
+ * const v = 1;
+ * In(-1, -2, -3, () => 'v is in -1/-2/-3') or In([-1, -2, -3], () => 'v is in -1/-2/-3')
  * must use in when() to compare
  * must pass a value to when() for comparison
  *
@@ -110,7 +112,8 @@ export function In<T, R>(...array: ((T)[] | T | (() => R))[]): Condition<T, (() 
  *
  * @example
  *
- * const result = NotIn(-1, -2, -3, () => 'a is not in -1/-2/-3') or NotIn([-1, -2, -3], () => 'a is not in -1/-2/-3')
+ * const v = 1;
+ * const result = NotIn(-1, -2, -3, () => 'v is not in -1/-2/-3') or NotIn([-1, -2, -3], () => 'v is not in -1/-2/-3')
  * must use in when() to compare
  * must pass a value to when() for comparison
  *
@@ -171,7 +174,8 @@ export function NotMatches<R>(regexp: RegExp, result: R | (() => R)): Condition<
  *
  * @example
  *
- * BelongTo('string', 'a is a string') or BelongTo('string', () => 'a is a string')
+ * const v = 1;
+ * BelongTo('string', 'v is a string') or BelongTo('string', () => 'v is a string')
  * must use in when() to compare
  * must pass a value to when() for type comparison
  *
@@ -189,7 +193,8 @@ export function BelongTo<T = any, R = any>(type: 'undefined' | 'boolean' | 'numb
  *
  * @example
  *
- * NotBelongTo('string', 'a is not a string') or NotBelongTo('string', () => 'a is not a string')
+ * const v = 1;
+ * NotBelongTo('string', 'v is not a string') or NotBelongTo('string', () => 'v is not a string')
  * must use in when() to compare
  * must pass a value to when() for type comparison
  *
@@ -207,7 +212,8 @@ export function NotBelongTo<T = any, R = any>(type: 'undefined' | 'boolean' | 'n
  *
  * @example
  *
- * IsNaN('a is NaN') or IsNaN(() => 'a is NaN')
+ * const v = 1;
+ * IsNaN('v is NaN') or IsNaN(() => 'v is NaN')
  * must use in when() to compare
  * must pass a value to when() for NaN comparison
  *
@@ -224,7 +230,8 @@ export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
  *
  * @example
  *
- * Between(1, 10, 'a is between 1 and 10') or Between(1, 10, () => 'a is between 1 and 10')
+ * const v = 1;
+ * Between(1, 10, 'v is between 1 and 10') or Between(1, 10, () => 'v is between 1 and 10')
  * must use in when() to compare
  * must pass a value to when() for comparison
  *
@@ -235,7 +242,7 @@ export function IsNaN<R>(result: R | (() => R)): Condition<number, R> {
  * @param result The result to be returned if the value is between the minimum and maximum values. It can be a value of type `R` or a function that returns a value of type `R`.
  */
 export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value !== undefined && value >= min && value <= max, result);
+    return new Condition<T, R>((value: T) => value !== undefined && value !== null && value >= min && value <= max, result);
 }
 
 /**
@@ -243,7 +250,8 @@ export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<
  *
  * @example
  *
- * NotBetween(1, 10, 'a is not between 1 and 10') or NotBetween(1, 10, () => 'a is not between 1 and 10')
+ * const v = 1;
+ * NotBetween(1, 10, 'v is not between 1 and 10') or NotBetween(1, 10, () => 'v is not between 1 and 10')
  * must use in when() to compare
  * must pass a value to when() for comparison
  *
@@ -255,7 +263,7 @@ export function Between<T, R>(min: T, max: T, result: R | (() => R)): Condition<
  * @returns The `Condition` object that represents the `not between` statement.
  */
 export function NotBetween<T, R>(min: T, max: T, result: R | (() => R)): Condition<T, R> {
-    return new Condition<T, R>((value: T) => value !== undefined && (value < min || value > max), result);
+    return new Condition<T, R>((value: T) => value !== undefined  && value !== null && (value < min || value > max), result);
 }
 
 /**

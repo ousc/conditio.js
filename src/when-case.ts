@@ -43,10 +43,10 @@ export class WhenCase<T> {
         this.value = value;
     }
 
-    whenCase<U>(...args: Cond<T, U>[]): U {
+    whenCase<R>(...args: Cond<T, R>[]): R {
         const conditions = args.map(item => {
-            if (typeof item === 'function' && ((item as (() => U))() as any).constructor.name === Condition.name) {
-                return (item as (() => U))();
+            if (typeof item === 'function' && ((item as unknown as ((result?: any) => R))() as any).constructor.name === Condition.name) {
+                return (item as unknown as ((result?: any) => R))();
             } else {
                 return item;
             }
@@ -59,6 +59,6 @@ export class WhenCase<T> {
         } else if (typeof reached === 'function') {
             return (reached as any)();
         }
-        return undefined as unknown as U;
+        return undefined as unknown as R;
     }
 }

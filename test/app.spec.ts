@@ -1,21 +1,21 @@
 import {expect} from "chai";
 
 import {
-    when,
-    Condition,
-    If,
-    Is,
-    Not,
-    In,
-    NotIn,
-    Matches,
-    NotMatches,
     BelongTo,
-    NotBelongTo,
-    IsNaN,
     Between,
+    Condition,
+    Else,
+    If,
+    In,
+    Is,
+    IsNaN,
+    Matches,
+    Not,
+    NotBelongTo,
     NotBetween,
-    Else
+    NotIn,
+    NotMatches,
+    when
 } from '../src'
 
 describe('Conditions', () => {
@@ -152,7 +152,7 @@ describe('Conditions', () => {
             const result = when(
                 If(a > 1, 'a > 1'),
                 If(a < 2, 'a < 2'),
-                Else('a <= 1')
+                () => 'a <= 1'
             );
             expect(result).to.equal('a > 1');
         });
