@@ -36,11 +36,11 @@ export const conditionToFn = <T>(condition: boolean | ((value: T) => boolean)) =
 export function If<R = any>(condition: boolean | ((value: any) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R>) | (() => Condition<any, R>) {
     if (result === undefined) {
         return function (result?: R | (() => R)) {
-            return new Condition<any, R>(conditionToFn(condition), result as R);
+            return new Condition<boolean, R>(conditionToFn(condition), result as R);
         }
     }
     const fn = conditionToFn(condition);
-    return () => new Condition<any, R>(fn, result);
+    return () => new Condition<boolean, R>(fn, result);
 }
 
 /**
@@ -180,8 +180,8 @@ export function NotMatches<R>(regexp: RegExp, result: R | (() => R)): Condition<
  * @param result The result to be returned if the value belongs to the type. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `belong to` statement.
  */
-export function BelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object', result: any): Condition<any, typeof result> {
-    return new Condition<any, typeof result>((value: any) => typeof value === type, result);
+export function BelongTo<T = any, R = any>(type: 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object', result: R | (() => R)): Condition<T, R> {
+    return new Condition<T, R>((value: T) => typeof value === type, result);
 }
 
 /**
@@ -198,8 +198,8 @@ export function BelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' | '
  * @param result The result to be returned if the value does not belong to the type. It can be a value of type `R` or a function that returns a value of type `R`.
  * @returns The `Condition` object that represents the `not belong to` statement.
  */
-export function NotBelongTo(type: 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object', result: any): Condition<any, typeof result> {
-    return new Condition<any, typeof result>((value: any) => typeof value !== type, result);
+export function NotBelongTo<T = any, R = any>(type: 'undefined' | 'boolean' | 'number' | 'bigint' | 'string' | 'symbol' | 'function' | 'object', result: R | (() => R)): Condition<T, R> {
+    return new Condition<T, R>((value: any) => typeof value !== type, result);
 }
 
 /**

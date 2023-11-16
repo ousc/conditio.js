@@ -1,5 +1,6 @@
 # `conditio`
 ![logo](https://github.com/ousc/conditio/blob/master/97297e06b21f4e1c8936863bbd7d50aa_1015376780.png?raw=true)
+
 `conditio` 是一个轻量级 JavaScript 库，它提供了一种简单而富有表现力的方法来编写带有返回值的条件表达式。 它允许您使用一组条件函数定义条件,并返回相应的结果。 该库提供了 If、Is、In、Matches、Between、BelongTo、Else、Not、NotIn、NotMatches、NotBetween 和 NotBelongTo 等函数来创建条件逻辑。 when 函数用于根据给定值有条件地执行函数。conditio写法简单，易于上手，且可以通过 npm 安装（2.1.7以前名为`when-case`）。
 
 [English](./readme.md) | 简体中文
@@ -45,7 +46,7 @@ const result = If(b > 5)(() => {
     .else(() => 'b is less than 5')
 ```
 
-### Conditional Functions
+### 条件函数
 - `If(condition, result | () => result)`: 本函数接受一个条件，如果条件为真，则返回一个结果或函数。或者，您可以将函数作为第二个参数传递。当第一个参数为真时，将调用此函数，并将其返回值用作结果。
 
 - `Is(value, result | () => result)`: 本函数返回第二个参数，如果第一个参数严格等于给定值，则返回 undefined。或者，第二个参数也可以是返回结果的函数。
