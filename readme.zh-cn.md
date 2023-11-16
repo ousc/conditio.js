@@ -14,6 +14,7 @@ npm install conditio --save
 
 ### 引入
 ```javascript
+
 import { when, If, Is, In, Matches, Between, BelongTo, IsNaN, Else, Not, NotIn, NotMatches, NotBetween, NotBelongTo } from 'conditio';
 ```
 
@@ -45,6 +46,22 @@ const result = If(b > 5)(() => {
     .elseIf(b === 5)(() => 'b is equal to 5')
     .else(() => 'b is less than 5')
 ```
+
+### TypeScript:
+`conditio`由`TypeScript`编写，并提供完整的类型定义和类型推断功能。
+
+```typescript
+const result = when(
+    If(true, 'true'),
+    Else('false')
+)
+```
+result的类型可被推断为`string`。
+
+| 版本    | TypeScript |
+|-------|------------|
+| 2.2.x | 1.x ~ 4.x  |
+| 2.3.x | 1.x ~ 5.x  |
 
 ### 条件函数
 - `If(condition, result | () => result)`: 本函数接受一个条件，如果条件为真，则返回一个结果或函数。或者，您可以将函数作为第二个参数传递。当第一个参数为真时，将调用此函数，并将其返回值用作结果。

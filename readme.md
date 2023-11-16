@@ -45,6 +45,17 @@ const result = If(b > 5)(() => {
     .else(() => 'b is less than 5')
 ```
 
+### TypeScript:
+`conditio` is written in `TypeScript` and provides complete type definitions and type inference.
+
+```typescript
+const result = when(
+    If(true, 'true'),
+    Else('false')
+)
+```
+The type of `result` can be inferred as `string`.
+
 ### Conditional Functions
 - `If(condition, result | () => result)`: This function takes a condition and returns a result or function if the condition is true. Alternatively, you can pass a function as the second argument. When the first parameter is true, this function will be called and its return value will be used as the result.
 
