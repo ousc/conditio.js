@@ -7,37 +7,8 @@ import {Condition, WhenCase} from "./index";
  * @typeparam R - The type of the condition.
  */
 export type Cond<T, R> =
-// If R extends a function that accepts an unknown result and returns a `Condition`,
-// then R itself is the correct type.
-    R extends ((result?: unknown) => Condition) ? R : ((result?: R) => Condition<T, R>) |
-        // If R extends a function that accepts a known result and returns a `Condition`,
-        // then R itself is the correct type.
-        (R extends ((result: unknown) => Condition) ? R :
-            // If R extends a function that accepts a known result and returns a `Condition`,
-            // then R itself is the correct type.
-            ((result: R) => Condition<T, R>) |
-            // If R extends a function that doesn't accept any parameters and returns a `Condition`,
-            // then R itself is the correct type.
-            (R extends (() => Condition) ? R : (() => Condition<T, R>)) |
-            // If R is already a `Condition`, then it is the correct type.
-            (R extends Condition ? R : Condition<T, R>) |
-            // If R is a function that doesn't accept any parameters and returns any type,
-            // then R itself is the correct type.
-            (R extends () => any ? R : (() => R))
-            );
-
-/**
- * Represents a type that conditionally extracts the return type of a function or keeps the original type.
- * @template T - The type to conditionally extract the return type.
- * @typedef {T extends () => infer R ? R : T} ConditionalResult
- */
-
-// @Example Usage:
-// type A = () => number;
-// type B = string;
-// type C = ConditionalResult<A>; // C is inferred as number
-// type D = ConditionalResult<B>; // D is inferred as string
-type ConditionalResult<T> = T extends () => infer R ? R : T;
+    Condition<T, R> | (() => Condition<T, R>) | (() => R) | ((result: (() => R) | R) => Condition<T, R>);
+    ;
 
 /**
  * Creates a new `WhenCase` object that represents a `when` statement.
@@ -61,7 +32,7 @@ type ConditionalResult<T> = T extends () => infer R ? R : T;
  * @returns The `WhenCase` object that represents the `when` statement.
  * @param val
  */
-export function when<T = undefined, R = any>(val: T): ConditionalResult<R>;
+export function when<T = any, R = any>(val: T): R;
 
 /**
  *  Creates a new `WhenCase` object that represents a `when` statement.
@@ -79,9 +50,9 @@ export function when<T = undefined, R = any>(val: T): ConditionalResult<R>;
  * @returns The `WhenCase` object that represents the `when` statement.
  *  @param cond
  */
-export function when<T = undefined, R = any>(
+export function when<T = any, R = any>(
     ...cond: Cond<T, R>[]
-): ConditionalResult<R>;
+): R;
 
 /**
  * Creates a new `WhenCase` object that represents a `when` statement.
@@ -119,15 +90,15 @@ export function when<T = undefined, R = any>(
 export function when<T = any, R = any>(
     valOrCond: T | Cond<T, R>,
     ...cond: Cond<T, R>[]
-): ConditionalResult<R> {
+): R {
     if (valOrCond === undefined) {
-        return undefined as ConditionalResult<R>;
+        return undefined as R;
     }
     if ([valOrCond, ...cond].every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
-        return new WhenCase<T>(undefined as unknown as T).whenCase(...[valOrCond, ...cond] as Cond<T, R>[]) as ConditionalResult<R>;
+        return new WhenCase<T>(undefined as unknown as T).whenCase(...[valOrCond, ...cond] as Cond<T, R>[]) as R;
     } else {
-        return function (...args2: Cond<T, R>[]) {
+        return function (...args2: (Cond<T, R>)[]) {
             return new WhenCase<T>(valOrCond as T).whenCase<R>(...args2);
-        } as ConditionalResult<R>;
+        } as R;
     }
 }

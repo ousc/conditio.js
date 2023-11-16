@@ -36,7 +36,7 @@ export const conditionToFn = <T>(condition: boolean | ((value: T) => boolean)) =
  */
 export function If<R = any>(condition: boolean | ((value: any) => boolean), result?: R | (() => R)): ((result: ((() => R) | R)) => Condition<any, R>) | (() => Condition<any, R>) {
     if (result === undefined) {
-        return (result?: R | (() => R)) => new Condition<any, R>(conditionToFn(condition), result as R)
+        return (result: R | (() => R)) => new Condition<any, R>(conditionToFn(condition), result)
     }
     const fn = conditionToFn(condition);
     return () => new Condition<any, R>(fn, result);

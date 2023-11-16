@@ -157,6 +157,16 @@ describe('Conditions', () => {
             expect(result).to.equal('a > 1');
         });
 
+        it('should directly execute the condition when no value is provided', () => {
+            const a = 3;
+            const result = when(
+                If(a > 1, () => 'a > 1'),
+                If(a < 2, () => 'a < 2'),
+                Else('a <= 1')
+            );
+            expect(result).to.equal('a > 1');
+        });
+
         it('If should return correct result when using alone', () => {
             const a = 1;
             const result: string = If(a > 1)(() => {
@@ -172,19 +182,19 @@ describe('Conditions', () => {
 
     describe('Condition', () => {
         it('should return correct result for a simple condition using Equals', () => {
-            const condition = new Condition((value: number | undefined) => value != undefined && value === 5, 'equal');
+            const condition = new Condition((value: number) => value != undefined && value === 5, 'equal');
             const result = when(5)(condition);
             expect(result).to.equal('equal');
         });
 
         it('should return correct result for a more complex condition using In', () => {
-            const condition = new Condition((value: number | undefined) => value != undefined && [1, 2, 3].includes(value), 'in');
+            const condition = new Condition((value: number) => value != undefined && [1, 2, 3].includes(value), 'in');
             const result = when(1)(condition);
             expect(result).to.equal('in');
         });
 
         it('should return correct result for a dynamic result using a function', () => {
-            const condition = new Condition((value: string | undefined) => value === 'abc', () => 'matched');
+            const condition = new Condition((value: string) => value === 'abc', () => 'matched');
             const result = when('abc')(condition);
             expect(result).to.equal('matched');
         });
