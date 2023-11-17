@@ -147,6 +147,14 @@ describe('Conditions', () => {
             expect(result).to.equal(undefined);
         });
 
+        it('should return correct result when value is undefined', () => {
+            const value = undefined;
+            const result: string = when(value)(
+                BelongTo('undefined', 'value is undefined')
+            );
+            expect(result).to.equal('value is undefined');
+        });
+
         it('should directly execute the condition when no value is provided', () => {
             const a = 3;
             const result = when(

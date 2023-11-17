@@ -91,9 +91,6 @@ export function when<T = any, R = any>(
     valOrCond: T | Cond<T, R>,
     ...cond: Cond<T, R>[]
 ): R {
-    if (valOrCond === undefined) {
-        return undefined as R;
-    }
     if ([valOrCond, ...cond].every(arg => arg instanceof Condition || typeof arg === 'function')) { // 检查是否为条件表达式
         return new WhenCase<T>(undefined as unknown as T).whenCase(...[valOrCond, ...cond] as Cond<T, R>[]) as R;
     } else {
