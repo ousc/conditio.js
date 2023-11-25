@@ -45,7 +45,7 @@ export class WhenCase<T> {
 
     whenCase<R>(...args: Cond<T, R>[]): R {
         const conditions = args.map(item => {
-            if (typeof item === 'function' && ((item as unknown as ((result?: any) => R))() as any).constructor.name === Condition.name) {
+            if (typeof item === 'function' && (item as Function)() && ((item as unknown as ((result?: any) => R))() as any).constructor.name === Condition.name) {
                 return (item as unknown as ((result?: any) => R))();
             } else {
                 return item;
