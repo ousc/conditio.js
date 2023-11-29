@@ -44,21 +44,24 @@ export class WhenCase<T> {
     }
 
     whenCase<R>(...args: Cond<T, R>[]): R {
-        const conditions = args.map(item => {
-            if (typeof item === 'function' && (item as Function)() && ((item as unknown as ((result?: any) => R))() as any).constructor.name === Condition.name) {
-                return (item as unknown as ((result?: any) => R))();
-            } else {
-                return item;
+        for(let i = 0; i < args.length; i++) {
+            const arg = args[i];
+            if (arg instanceof Condition && arg.isTrue(this.value)) {
+                return arg.getResult(this.value);
+            } else if (
+                typeof arg === 'function'
+            ) {
+                if (i !== args.length - 1) {
+                    const condition = (arg as unknown as ((result?: any) => R))()
+                    if (condition && condition.constructor.name === Condition.name && (condition as unknown as Condition<T, R>).isTrue(this.value)) {
+                        return (condition as unknown as Condition<T, R>).getResult(this.value);
+                    }
+                } else {
+                    return (arg as any)();
+                }
             }
-        });
-        const reached = conditions.find(arg =>
-            (arg instanceof Condition && arg.isTrue(this.value)) ||
-            (typeof arg === 'function'));
-        if (reached instanceof Condition) {
-            return reached.getResult(this.value);
-        } else if (typeof reached === 'function') {
-            return (reached as any)();
         }
+
         return undefined as unknown as R;
     }
 }
